@@ -75,12 +75,12 @@ export default class SnakeZone extends Component {
         }
         this.isMobile = device.width < 500;
 
-        const heightPart = this.isMobile ? 0.75 : 0.85;
-        const widthPart = this.isMobile ? 8.5 / 20 : 9.5 / 16;
+        const heightPart = this.isMobile ? 0.75 : 0.88;
+        const widthPart = this.isMobile ? 8.6 / 20 : 9.5 / 16;
 
         const scale = 1;
         let cellBase = device.height < 900 ? 34 : 31;
-        cellBase = this.isMobile ? 32 : cellBase;
+        cellBase = this.isMobile ? 26 : cellBase;
         this.cellSize = Math.round(cellBase * scale * device.height / 960);
 
         this.activeHeight = Math.round(device.height * heightPart / this.cellSize) * this.cellSize;
@@ -131,7 +131,7 @@ export default class SnakeZone extends Component {
     }
 
     getBarriers = (snake) => {
-        const barrierQty = randAB(4, 10);
+        const barrierQty = randAB(3, 10);
         const barriers = [];
 
         const createBarrier = _ => {

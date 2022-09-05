@@ -8,14 +8,8 @@ export default class YandexManager {
                     console.log('Yandex SDK', ysdk)
                     window.ysdk = ysdk;
                     window.lang = ysdk.environment.i18n.lang;
-                    // показ полноэкранной рекламы
-                    ysdk.adv.showFullscreenAdv({
-                        callbacks: {
-                            onOpen: handler,
-                            onError: handler,
-                            onOffline: handler,
-                        }
-                    });
+                    ysdk.adv.showFullscreenAdv();
+                    handler();
                 });
         });
     }

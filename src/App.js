@@ -20,6 +20,7 @@ export default class App extends Component {
         super(props);
 
         this.state = {
+            isAdvWatched: false,
             isDarkMode: false,
             isRoundCells: false, // вид еды и частей змейки (круг/квадрат)
             accentColor: '', // цвет кнопок управления
@@ -33,7 +34,6 @@ export default class App extends Component {
             maxScore: 0,
         };
         this.screenRef = React.createRef();
-        this.isAdvWatched = false;
     }
 
     componentDidMount = () => {
@@ -46,6 +46,13 @@ export default class App extends Component {
             pause: new Audio(SoundPause),
         };
         this.setActiveStatus('init');
+        //TODO: дубль убрать в SnakeZone
+        const body = document.querySelector('html');
+        const device = {
+            width: body.offsetWidth,
+            height: body.offsetHeight
+        }
+        this.isMobile = device.width < 500;
     }
 
     componentWillUnmount() {
@@ -83,7 +90,7 @@ export default class App extends Component {
     }
 
     setAdvWatched = _ => {
-        this.isAdvWatched = true;
+        this.setState({isAdvWatched: true});
     }
 
     changeCourse = snakeCourse => {
@@ -144,6 +151,7 @@ export default class App extends Component {
             speedNum,
             score,
             maxScore,
+            isAdvWatched
         } = this.state;
 
         return (
@@ -151,10 +159,11 @@ export default class App extends Component {
                 {activeStatus === 'init' || activeStatus === 'settings' ?
                     <Settings
                         accentColor={accentColor}
-                        isAdvWatched={this.isAdvWatched}
+                        isAdvWatched={isAdvWatched}
                         advManager={this.props.advManager}
                         backgroundColorIndex={backgroundColorIndex}
                         setBackgroundColor={this.setBackgroundColor}
+                        setAdvWatched={this.setAdvWatched}
                         switchSettings={_ => this.setActiveStatus('snakeMove')}/> : null}
                 {activeStatus === 'pause' ?
                     <Pause
@@ -186,8 +195,7 @@ export default class App extends Component {
                             {!this.isMobile ?
                                 <Controls
                                     accentColor={accentColor}
-                                    changeCourse={this.changeCourse}
-                                /> : null}
+                                    changeCourse={this.changeCourse} /> : null}
                         </div>
                         <Panel
                             {...state}
@@ -201,6 +209,12 @@ export default class App extends Component {
                         />
                     </div>
                 </div>
+                {this.isMobile ?
+                    <div className="controls-wrap-mobile">
+                        <Controls
+                            accentColor={accentColor}
+                            changeCourse={this.changeCourse} />
+                    </div> : null}
             </div>
         );
     }
