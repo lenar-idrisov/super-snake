@@ -3,13 +3,20 @@
 # dependencies
 /node_modules
 /.pnp
-.pnp.js
+/.idea
+/.vscode
+/.history
+*.wav
+*.png
+*.css.map
+*.css.js
 
 # testing
 /coverage
 
 # production
 /build
+build.zip
 
 # misc
 .DS_Store

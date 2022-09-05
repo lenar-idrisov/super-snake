@@ -1,0 +1,82 @@
+$button_size: 0.78rem;
+
+.panel {
+   display: flex;
+   flex-direction: column;
+   margin-top: -0.94rem;
+}
+
+.touch {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.touch-button {
+   display: flex;
+   flex-direction: column;
+   height: $button_size;
+   width: $button_size;
+   justify-content: center;
+   align-items: center;
+   border-width: 1px;
+   background: #0b6470;
+   transition: .5s;
+}
+
+.touch-button:hover {
+   background: #2e9999;
+}
+
+.touch-button img {
+   height: 0.31rem;
+   max-width: 0.32rem;
+   pointer-events: none;
+}
+
+.touch-button_num {
+   font-size: 0.28rem;
+   font-weight: bold;
+   color: white;
+}
+
+
+.indicators {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.info {
+   background: #2e9999;
+   display: flex;
+   flex-direction: column;
+   height: $button_size;
+   width: $button_size;
+   justify-content: center;
+   align-items: center;
+   border-width: 1px;
+   font-size: 0.21rem;
+   color: #43254b;
+}
+
+.info_num {
+   color: #fff;
+   font-size: 0.2rem;
+}
+
+.next {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   top: 0.21rem;
+   left: 0.21rem;
+}
+
+.next_cell {
+   position: absolute;
+   background: white;
+   border: 1px solid #43254b;
+}

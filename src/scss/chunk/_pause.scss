@@ -1,0 +1,16 @@
+.pause {
+   position: relative;
+   display: flex;
+   justify-content: center;
+   border-radius: 70px;
+   box-shadow: 0px 0px 20px 3px rgb(0 0 0 / 52%);
+
+   .image {
+      width: 100%;
+   }
+
+   .play {
+      height: 0.2rem;
+      margin-left: 0.1rem;
+   }
+}

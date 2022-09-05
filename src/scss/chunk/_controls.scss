@@ -1,0 +1,28 @@
+.controls-wrap {
+   display: flex;
+   justify-content: center;
+}
+
+.controls-wrap-mobile {
+   margin: 0 auto 0.6rem auto;
+   width: 90%;
+}
+
+.control {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-grow: 1;
+   height: 0.83rem;
+   transition: .5s;
+}
+
+.control:hover {
+   filter: brightness(1.4);
+}
+
+.control img {
+   pointer-events: none;
+   height: 0.31rem;
+   max-width: 0.31rem;
+}
