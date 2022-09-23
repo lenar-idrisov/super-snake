@@ -20,7 +20,7 @@ export default function Ending(props) {
                     </button>
                 </div>
                 <div className="window bottom-window">
-                    <object data={props.activeStatus === 'win' ? WinEnd : FailEnd}
+                    <object data={props.status === 'win' ? WinEnd : FailEnd}
                             className="image"/>
                     <button className="main-button"
                             style={{backgroundColor: props.accentColor}}

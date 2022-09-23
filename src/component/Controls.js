@@ -13,7 +13,7 @@ export default function RightMenu(props) {
         </button>;
     return (
         <div className="controls-wrap">
-            <Control icon={ArrowLeft} handler={_ => props.changeCourse('left')}/>
+            <Control icon={ArrowLeft} handler={_ => props.changeDirection('left')}/>
             {/*{props.isMobile ?
                 <button className='control' style={{backgroundColor: accentColor}}
                         onPointerDown={props.accelerate_start}
@@ -21,9 +21,9 @@ export default function RightMenu(props) {
                         onPointerLeave={props.accelerate_end}>
                     <img src={ArrowDown}/>
                 </button> : null}*/}
-            <Control icon={ArrowUp} handler={_ => props.changeCourse('up')}/>
-            <Control icon={ArrowDown} handler={_ => props.changeCourse('down')}/>
-            <Control icon={ArrowRight} handler={_ => props.changeCourse('right')}/>
+            <Control icon={ArrowUp} handler={_ => props.changeDirection('up')}/>
+            <Control icon={ArrowDown} handler={_ => props.changeDirection('down')}/>
+            <Control icon={ArrowRight} handler={_ => props.changeDirection('right')}/>
         </div>
     );
 }

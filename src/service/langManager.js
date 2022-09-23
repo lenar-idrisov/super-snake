@@ -4,8 +4,11 @@ const dictionary = [
     ['Попробуйте оценить игру позже', 'Try to rate the game later'],
 
     ['Выберите цвет игровой области', 'Choose the color of the game area'],
+    ['Выбери режим игры','Choose the game mode'],
     ['( доступно после рекламы )', '(available after the ad)'],
     ['Старт', 'Go'],
+    ['без барьеров', 'without barriers'],
+    ['с барьерами', 'with barriers'],
     ['Играть', 'Play'],
     ['Играть еще', 'Restart'],
     ['Другая игра', 'Other game'],

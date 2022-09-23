@@ -5,15 +5,13 @@ import ThemeLightIcon from "../assets/image/icons/themeLight.png";
 import Settings from "../assets/image/icons/settings.png";
 import PauseIcon from "../assets/image/icons/pause.png";
 import PlayIcon from "../assets/image/icons/play.png";
-import CellRect from "../assets/image/icons/cellRect.png";
-import CellRound from "../assets/image/icons/cellRound.png";
 
 export default function Panel(props) {
     return (
         <div className="panel">
             <div className="touch">
-                <button className="touch-button" onClick={props.switchVolume}>
-                    <img src={props.volume ? SoundOnIcon : SoundOffIcon}/>
+                <button className="touch-button" onClick={props.switchSound}>
+                    <img src={props.isSoundEnable ? SoundOnIcon : SoundOffIcon}/>
                 </button>
                 <button className="touch-button" onClick={props.switchSettings}>
                     <img src={Settings}/>
@@ -21,13 +19,10 @@ export default function Panel(props) {
                 <button className="touch-button" onClick={props.switchDarkMode}>
                     <img src={!props.isDarkMode ? ThemeLightIcon : ThemeDarkIcon}/>
                 </button>
-                <button className="touch-button" onClick={props.switchCellKind}>
-                    <img src={!props.isRoundCells ? CellRect : CellRound}/>
-                </button>
                 <button className="touch-button" onClick={props.switchPause}>
-                    <img src={props.activeStatus !== 'pause' ? PauseIcon : PlayIcon}/>
+                    <img src={props.status !== 'pause' ? PauseIcon : PlayIcon}/>
                 </button>
-                <button className="touch-button" onClick={props.changeSpeed}>
+                <button className="touch-button" onClick={props.increaseSpeed}>
                     <div className="touch-button_num">{props.speedNum}</div>
                 </button>
             </div>

@@ -66,5 +66,5 @@ export default class YandexManager {
 
     // проверка, игра сейчас на весь экран открыта
     isFullScreenMode = _ =>
-        window.ysdk.screen.fullscreen.activeStatus === 'off';
+        window.ysdk.screen.fullscreen.status === 'off';
 }

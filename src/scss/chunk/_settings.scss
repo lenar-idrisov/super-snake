@@ -11,7 +11,6 @@
    .title {
       color: white;
       text-align: center;
-      margin: 0;
       margin-bottom: 0.1rem;
       font-weight: normal;
       font-size: 0.25rem;
@@ -24,26 +23,66 @@
       margin-bottom: 0.1rem;
    }
 
-   .colors {
-      box-sizing: border-box;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+   .mode-part {
+      border-radius: 15px 15px 0 0;
+      //background: #292B45;;
+      user-select: none;
 
-      .color {
-         width: 0.34rem;
-         height: 0.34rem;
-         border-radius: 50%;
-         border: 3px solid transparent;
-         margin: 0.13rem;
-         cursor: pointer;
-         background-origin: border-box;
-         transition: .4s;
+      .input-container {
+         color: white;
+         display: flex;
+         align-items: center;
+         margin: 0.16rem;
       }
 
-      .color-selected {
-         border: 3px solid white;
-         box-shadow: 0px 0px 30px 13px rgb(0 0 0 / 52%);
+      .switcher {
+         width: 0.24rem;
+         height: 0.24rem;
+         border-radius: 50%;
+         margin-left: 0.21rem;
+         margin-right: 0.21rem;
+         border: 2px solid #7e7d81;
+         transition: 0.4s;
+         cursor: pointer;
+         flex-shrink: 0;
+      }
+
+      .switcher-checked {
+         border: 2px solid #5A5A5A;
+      }
+
+      .comment {
+         cursor: pointer;
+         text-align: left;
+         font-size: 0.2rem;
+      }
+   }
+
+   .colors-part {
+      padding: 0.14rem 0;
+      border-radius: 0 0 15px 15px;
+
+      .colors {
+         box-sizing: border-box;
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: center;
+
+         .color {
+            width: 0.34rem;
+            height: 0.34rem;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            margin: 0.13rem;
+            cursor: pointer;
+            background-origin: border-box;
+            transition: .4s;
+         }
+
+         .color-selected {
+            border: 3px solid white;
+            box-shadow: 0px 0px 30px 13px rgb(0 0 0 / 52%);
+         }
       }
    }
 }

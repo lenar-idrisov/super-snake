@@ -1,7 +1,7 @@
 import YandexManager from './adv/YandexManager';
+import EmptyManager from "./adv/EmptyManager";
 
 export function isSite(siteName) {
-    //console.log(getUrlParams(), window.location);
     return (window.location.hostname.includes(siteName) ||
         window.location.search.includes(siteName));
 }
@@ -24,6 +24,10 @@ export function isSite(siteName) {
 
 export function getAdvManager() {
     let manager;
-    manager = new YandexManager();
+  if (isSite('yandex')) {
+        manager = new YandexManager();
+    } else {
+        manager = new EmptyManager();
+    }
     return manager;
 }

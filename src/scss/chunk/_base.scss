@@ -29,17 +29,17 @@ button {
    border: none;
    outline: none;
    cursor: pointer;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 
 .main-button {
    border-radius: 30px;
    padding: 0.14rem 0.31rem;
    color: white;
-   display: flex;
-   justify-content: center;
-   align-items: center;
    font-size: 0.21rem;
-   margin: 0.21rem auto 0.01rem auto;
+   margin: 0.20rem auto 0.01rem auto;
    transition: 0.5s;
    position: absolute;
    bottom: 0.31rem;
@@ -49,7 +49,7 @@ button {
 
 .main-button:hover {
    transform: scale(1.2);
-   filter: saturate(300%)
+   filter: saturate(250%)
 }
 
 
@@ -83,7 +83,7 @@ button {
    overflow: hidden;
    position: relative;
 }
-.main-part {
+.main-zone {
    display: flex;
    justify-content: center;
    align-items: center;

@@ -1,0 +1,359 @@
+@import url("https://fonts.googleapis.com/css2?family=DynaPuff&family=Open+Sans&family=Rubik&display=swap");
+html {
+  width: 100%;
+  height: 100vh;
+  font-size: 10vh;
+}
+
+body {
+  margin: 0;
+  font-family: "DynaPuff", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-button {
+  border-radius: 30px;
+  padding: 0.14rem 0.31rem;
+  color: white;
+  font-size: 0.21rem;
+  margin: 0.2rem auto 0.01rem auto;
+  transition: 0.5s;
+  position: absolute;
+  bottom: 0.31rem;
+  box-shadow: 0px 0px 6px 4px rgba(0, 0, 0, 0.36);
+  cursor: pointer;
+}
+
+.main-button:hover {
+  transform: scale(1.2);
+  filter: saturate(250%);
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.modal-body {
+  width: 4.3rem;
+  border-radius: 15px;
+  box-shadow: 0px 0px 11px 5px rgba(0, 0, 0, 0.42);
+}
+
+.game {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #b2bfcc;
+  user-select: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.main-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.centered-part {
+  margin-left: 0.5rem;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  margin-right: 0.3rem;
+  position: relative;
+  overflow: hidden;
+}
+.board .grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.board .cell {
+  border: 1px solid black;
+  box-sizing: border-box;
+  transition: position 0.1s;
+}
+.board .food {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 5;
+  border: 1px solid black;
+}
+.board .snake-chunk,
+.board .barrier-chunk {
+  position: absolute;
+  z-index: 5;
+}
+
+.light-theme .grid {
+  background-color: #becede;
+}
+.light-theme .cell {
+  border-color: rgba(187, 190, 205, 0.85);
+}
+.light-theme .barrier-chunk {
+  background-color: #797886;
+}
+
+.dark-theme .grid {
+  background-color: #2a2d2d;
+}
+.dark-theme .cell {
+  border-color: #272727;
+}
+.dark-theme .barrier-chunk {
+  background-color: black;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  margin-top: -0.94rem;
+}
+
+.touch {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.touch-button {
+  display: flex;
+  flex-direction: column;
+  height: 0.78rem;
+  width: 0.78rem;
+  justify-content: center;
+  align-items: center;
+  border-width: 1px;
+  background: #0b6470;
+  transition: 0.5s;
+}
+
+.touch-button:hover {
+  background: #2e9999;
+}
+
+.touch-button img {
+  height: 0.31rem;
+  max-width: 0.32rem;
+  pointer-events: none;
+}
+
+.touch-button_num {
+  font-size: 0.28rem;
+  font-weight: bold;
+  color: white;
+}
+
+.indicators {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info {
+  background: #2e9999;
+  display: flex;
+  flex-direction: column;
+  height: 0.78rem;
+  width: 0.78rem;
+  justify-content: center;
+  align-items: center;
+  border-width: 1px;
+  font-size: 0.21rem;
+  color: #43254b;
+}
+
+.info_num {
+  color: #fff;
+  font-size: 0.2rem;
+}
+
+.next {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  top: 0.21rem;
+  left: 0.21rem;
+}
+
+.next_cell {
+  position: absolute;
+  background: white;
+  border: 1px solid #43254b;
+}
+
+.controls-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 0.6rem auto;
+  width: 90%;
+}
+
+.control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  height: 0.83rem;
+  transition: 0.5s;
+}
+
+.control:hover {
+  filter: brightness(1.4);
+}
+
+.control img {
+  pointer-events: none;
+  height: 0.31rem;
+  max-width: 0.31rem;
+}
+
+.settings {
+  background-color: black;
+  position: relative;
+  padding: 0.3rem 0;
+  border-radius: 15px;
+}
+.settings .main-button {
+  position: static;
+}
+.settings .title {
+  color: white;
+  text-align: center;
+  margin-bottom: 0.1rem;
+  font-weight: normal;
+  font-size: 0.25rem;
+}
+.settings .adv-video {
+  color: grey;
+  font-size: 0.19rem;
+  text-align: center;
+  margin-bottom: 0.1rem;
+}
+.settings .mode-part {
+  border-radius: 15px 15px 0 0;
+  user-select: none;
+}
+.settings .mode-part .input-container {
+  color: white;
+  display: flex;
+  align-items: center;
+  margin: 0.16rem;
+}
+.settings .mode-part .switcher {
+  width: 0.24rem;
+  height: 0.24rem;
+  border-radius: 50%;
+  margin-left: 0.21rem;
+  margin-right: 0.21rem;
+  border: 2px solid #7e7d81;
+  transition: 0.4s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.settings .mode-part .switcher-checked {
+  border: 2px solid #5A5A5A;
+}
+.settings .mode-part .comment {
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.2rem;
+}
+.settings .colors-part {
+  padding: 0.14rem 0;
+  border-radius: 0 0 15px 15px;
+}
+.settings .colors-part .colors {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.settings .colors-part .colors .color {
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  margin: 0.13rem;
+  cursor: pointer;
+  background-origin: border-box;
+  transition: 0.4s;
+}
+.settings .colors-part .colors .color-selected {
+  border: 3px solid white;
+  box-shadow: 0px 0px 30px 13px rgba(0, 0, 0, 0.52);
+}
+
+.pause {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-radius: 70px;
+  box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.52);
+}
+.pause .image {
+  width: 100%;
+}
+.pause .play {
+  height: 0.2rem;
+  margin-left: 0.1rem;
+}
+
+.ending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ending .window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: 0.5s;
+  position: relative;
+}
+.ending .window:hover {
+  transform: scale(1.07);
+}
+.ending .top-window {
+  width: 4rem;
+  margin-bottom: 0.25rem;
+}
+.ending .bottom-window {
+  width: 4rem;
+  margin: 0 0.28rem;
+}
+.ending .image {
+  width: 100%;
+  border-radius: 50px;
+  box-shadow: 0 0 30px 13px rgba(0, 0, 0, 0.21);
+}
