@@ -2,11 +2,10 @@ import {useState, useEffect, useRef} from 'react';
 import randAB from "../service/utils";
 import {snakeColors} from "../service/colors";
 import barriersScheme from "../service/barriersScheme";
-import getReadyStyles from "../service/getReadyStyles";
+import {getReadyStyles} from "../service/helpers";
 
 export default function SnakeLive(props) {
-    // таймер, управляющий движением змейки
-    const timerRef = useRef();
+    const prevDirRef = useRef();
     // горизонтальная и вертикальная скорости
     const [snakeLive, setSnakeLive] = useState({
         snake: [],
@@ -59,14 +58,23 @@ export default function SnakeLive(props) {
 
     useEffect(_ => {
         if (props.status !== 'move') return;
-        setSnakeMove(true);
+        if (!prevDirRef.current) prevDirRef.current = props.dir;
+        if (prevDirRef.current !== props.dir) {
+            // запускает змею после смены курса
+            moveSnake();
+        } else {
+            // двигает змею вперед
+            setSnakeMove(true);
+        }
+        prevDirRef.current = props.dir;
         return _ => setSnakeMove(false);
-    }, [snakeLive])
+    }, [snakeLive, props.dir])
 
     function setSnakeMove(isMove) {
-        clearTimeout(timerRef.current);
+        clearTimeout(window.snakeMoveTimerId);
         if (isMove) {
-            timerRef.current = setTimeout(
+            // таймер, управляющий движением змейки
+            window.snakeMoveTimerId = setTimeout(
                 _ => moveSnake(),
                 props.realSpeed
             );
@@ -94,7 +102,7 @@ export default function SnakeLive(props) {
         // больше предохранитель, чем необходимость
         if (eaten) {
             props.increaseScore();
-            if (props.score === props.maxScore) {
+            if (props.score >= props.maxScore) {
                 props.switchWin();
                 props.playSound('win');
             } else {
@@ -116,7 +124,7 @@ export default function SnakeLive(props) {
             if (isWall) {
                 props.switchFail();
                 props.playSound('fail');
-                //window.navigator?.vibrate(300);
+                window.navigator?.vibrate(300);
             } else {
                 newSnake.unshift(head);
                 newSnake.pop();

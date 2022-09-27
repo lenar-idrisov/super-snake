@@ -1,4 +1,16 @@
-export default function getReadyStyles(snakeLive, baseSizes) {
+export const getKeydownKey = event => {
+    // учитываем только клавиши вверх/вниз/влево/вправо
+    if ([
+        'ArrowUp', 'ArrowDown',
+        'ArrowRight', 'ArrowLeft'
+    ].includes(event.code)) {
+        return event.code.replace('Arrow', '').toLowerCase();
+    } else {
+        return null;
+    }
+}
+
+export const getReadyStyles = (snakeLive, baseSizes) => {
     // масштабирование стилей
     let {snake, barriers, foodList} = snakeLive;
     const {cellSize, cellQuantity} = baseSizes;

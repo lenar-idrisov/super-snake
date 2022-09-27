@@ -33,7 +33,7 @@ export const themeColors = [
     'linear-gradient(to right, #3e5151, #decba4)',
     'radial-gradient(1078px at 5.2% 51.6%, rgb(32 124 113) 0%, rgb(7, 3, 53) 97.5%)',
     'linear-gradient(to right, #00467f, #a5cc82)',
-    'radial-gradient(775px at 49% 49.1%, rgb(159 101 115) 0%, rgb(0, 0, 0) 100.3%)',
+    'radial-gradient(874px at 50.3% 11.8%, rgb(120 96 189) 0%, rgb(149 85 225) 8.8%, rgba(34, 147, 136, 0.97) 56%, rgb(30, 79, 104) 100.2%)',
     'radial-gradient(613px at 28.5% 44%, rgb(190 138 233) 0%, rgba(187, 187, 187, 0) 90%), radial-gradient(549px at 84.5% 49%, rgb(121 167 238) 17%, rgb(162 173 190) 90%)',
     'radial-gradient(560px at 50.5% 100%, rgb(207, 233, 138) -5%, rgba(187, 187, 187, 0) 90%), radial-gradient(613px at 19.5% 43%, rgb(233, 138, 193) 0%, rgba(187, 187, 187, 0) 90%), radial-gradient(549px at 84.5% 49%, rgb(121, 238, 182) -5%, rgb(162, 173, 190) 90%)',
     'radial-gradient(circle at 50.5% 55%, rgb(12, 158, 79) 0%, rgb(0 71 57) 67.9%)',

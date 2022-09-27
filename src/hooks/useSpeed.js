@@ -15,7 +15,7 @@ export default _ => {
 
     function getSpeed(speedNum) {
         let speedResult;
-        if (speedNum === 1) speedResult = 300;
+        if (speedNum === 1) speedResult = 290;
         if (speedNum === 2) speedResult = 250;
         if (speedNum === 3) speedResult = 200;
         if (speedNum === 4) speedResult = 150;

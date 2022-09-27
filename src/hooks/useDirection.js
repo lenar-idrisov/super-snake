@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import {getKeydownKey} from "../service/helpers";
 
 export default _ => {
     // направление хода змеи
@@ -30,22 +31,19 @@ export default _ => {
 
     const changeDirection = newDirection => {
         const correctDir = getCorrectedDir(newDirection);
-        changeDeltaXY(correctDir);
-        setDirection(correctDir);
+        if (newDirection !== dir) {
+            // нужно, чтобы змея не успела сделать шаг в старом направлении
+            clearTimeout(window.snakeMoveTimerId);
+            changeDeltaXY(correctDir);
+            setDirection(correctDir);
+        }
     }
 
     const keydownHandler = (event) => {
-        let dir;
-        if (event.code === 'ArrowUp') {
-            dir = 'up';
-        } else if (event.code === 'ArrowDown') {
-            dir = 'down';
-        } else if (event.code === 'ArrowRight') {
-            dir = 'right';
-        } else if (event.code === 'ArrowLeft') {
-            dir = 'left';
+        const newDir = getKeydownKey(event);
+        if (newDir !== null && newDir !== dir) {
+            changeDirection(newDir);
         }
-        changeDirection(dir);
     }
 
     const changeDeltaXY = (newDir) => {
@@ -73,6 +71,7 @@ export default _ => {
     }
 
     return {
+        dir,
         deltaXY,
         changeDirection
     }

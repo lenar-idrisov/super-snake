@@ -6,7 +6,7 @@ import Panel from './component/Panel';
 import Ending from "./component/Ending";
 import Board from "./component/Board";
 
-import useSnakeCourse from './hooks/useDirrection';
+import useDirection from './hooks/useDirection';
 import useSound from "./hooks/useSound";
 import useSpeed from "./hooks/useSpeed";
 
@@ -23,16 +23,16 @@ export default function App(props) {
     const [accentColor, setAccentColor] = useState('');
     // цвет фона игры
     const [backColorIndex, setBackColor] = useState(0);
-    const [snakeInfo, setSnakeInfo] = useState(_ => getInitialSnakeInfo());
+    const [scoreInfo, setScoreInfo] = useState(_ => getInitialScoreInfo());
     const [gameFlags, setGameFlags] = useState({
         isHardMode: false,
         isAdvWatched: false,
         isDarkMode: false,
         isVolumeEnable: true,
     });
-    const {deltaXY, changeDirection} = useSnakeCourse();
-    const {isSoundEnable, switchSound, playSound} = useSound();
     const {speedNum, realSpeed, increaseSpeed} = useSpeed();
+    const {dir, deltaXY, changeDirection} = useDirection();
+    const {isSoundEnable, switchSound, playSound} = useSound();
 
 
     useEffect(_ => {
@@ -48,11 +48,11 @@ export default function App(props) {
             changeDirection('right');
             setBackColor(randAB(0, themeColors.length));
             setAccentColor(getAccentColor());
-            setSnakeInfo(getInitialSnakeInfo());
+            setScoreInfo(getInitialScoreInfo());
         }
     }
 
-    function getInitialSnakeInfo() {
+    function getInitialScoreInfo() {
         return {
             score: 0,
             maxScore: Math.ceil(randAB(500, 1000) / 5) * 5,
@@ -67,14 +67,14 @@ export default function App(props) {
     }
 
     function increaseScore() {
-        setSnakeInfo({
-            ...snakeInfo,
-            score: snakeInfo.score + 5,
+        setScoreInfo({
+            ...scoreInfo,
+            score: scoreInfo.score + 5,
         })
     }
 
     function getAccentColor() {
-        let hue, saturation, lightness, accentColor;
+        let hue, saturation, lightness;
         hue = randAB(0, 360) + 'deg';
         saturation = randAB(30, 95) + '%';
         lightness = randAB(30, 45) + '%';
@@ -108,10 +108,11 @@ export default function App(props) {
                     restart={_ => changeStatus('restart')}/> : null}
             <div className={'main-zone' + (!isMobileRef.current ? ' centered-part' : '')}>
                 <Board
-                    {...snakeInfo}
+                    {...scoreInfo}
                     {...gameFlags}
                     status={status}
                     deltaXY={deltaXY}
+                    dir={dir}
                     realSpeed={realSpeed}
                     changeDirection={changeDirection}
                     playSound={playSound}
@@ -121,7 +122,7 @@ export default function App(props) {
                     switchWin={_ => changeStatus('win')}
                 />
                 <Panel
-                    {...snakeInfo}
+                    {...scoreInfo}
                     {...gameFlags}
                     speedNum={speedNum}
                     switchSound={switchSound}
