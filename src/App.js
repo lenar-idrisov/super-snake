@@ -28,7 +28,6 @@ export default function App(props) {
         isHardMode: false,
         isAdvWatched: false,
         isDarkMode: false,
-        isVolumeEnable: true,
     });
     const {speedNum, realSpeed, increaseSpeed} = useSpeed();
     const {dir, deltaXY, changeDirection} = useDirection();
@@ -41,14 +40,14 @@ export default function App(props) {
 
 
     function changeStatus(newStatus) {
-        setStatus(newStatus);
-        if (newStatus === 'move' && (['init', 'restart'].includes(status))) {
-            setTimeout(_ => setStatus(newStatus), 4000);
-        } else if (['init', 'restart'].includes(newStatus)) {
+        if (['init', 'restart'].includes(newStatus)) {
             changeDirection('right');
             setBackColor(randAB(0, themeColors.length));
             setAccentColor(getAccentColor());
             setScoreInfo(getInitialScoreInfo());
+            setStatus(newStatus);
+        } else {
+            setStatus(newStatus);
         }
     }
 
@@ -110,6 +109,7 @@ export default function App(props) {
                 <Board
                     {...scoreInfo}
                     {...gameFlags}
+                    advManager={props.advManager}
                     status={status}
                     deltaXY={deltaXY}
                     dir={dir}
