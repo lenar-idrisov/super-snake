@@ -5,11 +5,20 @@ import SoundFail from '../assets/sound/fail.mp3';
 import SoundWin from '../assets/sound/win.mp3';
 import SoundPause from '../assets/sound/pause.mp3';
 
-export default _ => {
-    const soundsRef = useRef();
+
+interface SoundList {
+    [index: string]: HTMLAudioElement;
+    eat: HTMLAudioElement;
+    fail: HTMLAudioElement;
+    win: HTMLAudioElement;
+    pause: HTMLAudioElement;
+}
+
+export default () => {
+    const soundsRef = useRef<SoundList>();
     const [isSoundEnable, setSoundEnable] = useState(true);
 
-    useEffect(_ => {
+    useEffect(() => {
         // предварительно загружаем звуки
         soundsRef.current = {
             eat: new Audio(SoundEat),
@@ -19,16 +28,18 @@ export default _ => {
         };
     }, [])
 
-    const switchSound = _ => {
+    const switchSound = () => {
         setSoundEnable(!isSoundEnable);
         for (const key in soundsRef.current) {
             soundsRef.current[key].volume = isSoundEnable ? 0 : 1;
         }
     }
 
-    const playSound = (name) => {
-        soundsRef.current[name].currentTime = 0;
-        soundsRef.current[name].play();
+    const playSound = (name: string) => {
+        if (soundsRef.current) {
+            soundsRef.current[name].currentTime = 0;
+            soundsRef.current[name].play();
+        }
     }
 
     return {

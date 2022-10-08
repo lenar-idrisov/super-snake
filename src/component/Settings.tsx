@@ -1,16 +1,17 @@
 import React from 'react';
 import {themeColors} from '../service/colors';
 import tr from '../service/langManager';
+import {SettingsProps} from "../service/customTypes";
 
-export default function Settings(props) {
-    const showAfterWatchAdv = (callback) => {
+export default function Settings(props: SettingsProps) {
+    const showAfterWatchAdv = (callback: Function) => {
         if (!props.isAdvWatched) {
             props.advManager.showRewardedVideo(
-                _ => {
+                () => {
                     props.setAdvWatched();
                     callback();
                 },
-                _ => {
+                () => {
                     callback();
                 }
             );
@@ -18,28 +19,28 @@ export default function Settings(props) {
             callback();
         }
     }
-    const switchMode = isHardMode => {
-        showAfterWatchAdv(_ => {
+    const switchMode = (isHardMode: boolean) => {
+        showAfterWatchAdv(() => {
             if ((isHardMode && !props.isHardMode) || (!isHardMode && props.isHardMode)) {
                 props.switchMode();
             }
         });
     }
 
-    const switchBackColor = colorIndex => {
-        showAfterWatchAdv(_ => props.setBackColor(colorIndex));
+    const switchBackColor = (colorIndex: number) => {
+        showAfterWatchAdv(() => props.setBackColor(colorIndex));
     }
 
 
-    const getOption = (comment, isHardMode) => {
+    const getOption = (comment: string, isHardMode: boolean) => {
         const isActive = isHardMode ? (props.isHardMode) : (!props.isHardMode);
         return (
             <div className="input-container">
                 <div className={'switcher' + (isActive ? ' switcher-checked' : '')}
                      style={{backgroundColor: isActive ? props.accentColor : ''}}
-                     onClick={_ => switchMode(isHardMode)}>
+                     onClick={() => switchMode(isHardMode)}>
                 </div>
-                <div className="comment" onClick={_ => switchMode(isHardMode)}>
+                <div className="comment" onClick={() => switchMode(isHardMode)}>
                     {tr(comment)}
                 </div>
             </div>
@@ -49,7 +50,7 @@ export default function Settings(props) {
     return (
         <div className="modal">
             <div className="modal-body settings">
-                {props.status === 'init' || props.status === 'restart' ?
+                {props.gameStatus === 'init' || props.gameStatus === 'restart' ?
                     <div className="mode-part">
                         <h2 className='title'>
                             {tr('Выбери режим игры')}
@@ -69,7 +70,7 @@ export default function Settings(props) {
                         {themeColors.map((color, i) =>
                             <div className={'color ' + (i === props.backColorIndex ? 'color-selected' : '')}
                                  style={{backgroundImage: color}}
-                                 onClick={_ => switchBackColor(i)}
+                                 onClick={() => switchBackColor(i)}
                                  key={'c' + i}>
                             </div>
                         )}

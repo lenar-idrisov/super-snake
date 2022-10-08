@@ -13,33 +13,28 @@ import useSpeed from "./hooks/useSpeed";
 import randAB from "./service/utils";
 import {themeColors} from './service/colors';
 import './scss/App.css';
+import {AppProps, GameFlags} from "./service/customTypes";
 
 
-export default function App(props) {
-    const isMobileRef = useRef();
+export default function App({advManager, isMobile}: AppProps) {
     // init/move/pause/fail/win/settings/restart
-    const [status, setStatus] = useState(null);
+    const [gameStatus, setStatus] = useState('');
     // цвет кнопок управления
     const [accentColor, setAccentColor] = useState('');
     // цвет фона игры
     const [backColorIndex, setBackColor] = useState(0);
-    const [scoreInfo, setScoreInfo] = useState(_ => getInitialScoreInfo());
-    const [gameFlags, setGameFlags] = useState({
+    const [scoreInfo, setScoreInfo] = useState(() => getInitialScoreInfo());
+    const [gameFlags, setGameFlags] = useState<GameFlags>({
         isHardMode: false,
         isAdvWatched: false,
         isDarkMode: false,
     });
     const {speedNum, realSpeed, increaseSpeed} = useSpeed();
-    const {dir, deltaXY, changeDirection} = useDirection();
+    const {dir, speedDXDY, changeDirection} = useDirection();
     const {isSoundEnable, switchSound, playSound} = useSound();
 
 
-    useEffect(_ => {
-        isMobileRef.current = document.querySelector('html').offsetWidth < 500;
-    }, [])
-
-
-    function changeStatus(newStatus) {
+    function changeStatus(newStatus: string) {
         if (['init', 'restart'].includes(newStatus)) {
             changeDirection('right');
             setBackColor(randAB(0, themeColors.length));
@@ -58,10 +53,10 @@ export default function App(props) {
         }
     }
 
-    function switchGameFlags(flagName) {
+    function switchGameFlags(flagName: string) {
         setGameFlags({
             ...gameFlags,
-            [flagName]: !gameFlags[flagName]
+            [flagName]: !(gameFlags[flagName])
         })
     }
 
@@ -77,63 +72,63 @@ export default function App(props) {
         hue = randAB(0, 360) + 'deg';
         saturation = randAB(30, 95) + '%';
         lightness = randAB(30, 45) + '%';
-        return  `hsl(${hue}, ${saturation}, ${lightness})`;
+        return `hsl(${hue}, ${saturation}, ${lightness})`;
     }
 
 
     return (
         <div className="game" style={{backgroundImage: themeColors[backColorIndex]}}>
-            {status === 'init' || status === 'settings' ?
+            {gameStatus === 'init' || gameStatus === 'settings' ?
                 <Settings
                     {...gameFlags}
-                    advManager={props.advManager}
+                    advManager={advManager}
                     accentColor={accentColor}
                     backColorIndex={backColorIndex}
-                    status={status}
+                    gameStatus={gameStatus}
                     setBackColor={setBackColor}
-                    setAdvWatched={_ => switchGameFlags('isAdvWatched')}
-                    switchMode={_ => switchGameFlags('isHardMode')}
-                    switchSettings={_ => changeStatus('move')}/> : null}
-            {status === 'pause' ?
+                    setAdvWatched={() => switchGameFlags('isAdvWatched')}
+                    switchMode={() => switchGameFlags('isHardMode')}
+                    switchSettings={() => changeStatus('move')}/> : null}
+            {gameStatus === 'pause' ?
                 <Pause
                     accentColor={accentColor}
-                    switchPause={_ => changeStatus('move')}
+                    switchPause={() => changeStatus('move')}
                 /> : null}
-            {status === 'win' || status === 'fail' ?
+            {gameStatus === 'win' || gameStatus === 'fail' ?
                 <Ending
-                    advManager={props.advManager}
-                    status={status}
+                    advManager={advManager}
+                    gameStatus={gameStatus}
                     accentColor={accentColor}
-                    restart={_ => changeStatus('restart')}/> : null}
-            <div className={'main-zone' + (!isMobileRef.current ? ' centered-part' : '')}>
+                    restart={() => changeStatus('restart')}/> : null}
+            <div className={'main-zone' + (!isMobile ? ' centered-part' : '')}>
                 <Board
                     {...scoreInfo}
                     {...gameFlags}
-                    advManager={props.advManager}
-                    status={status}
-                    deltaXY={deltaXY}
+                    advManager={advManager}
+                    gameStatus={gameStatus}
+                    speedDXDY={speedDXDY}
                     dir={dir}
                     realSpeed={realSpeed}
                     changeDirection={changeDirection}
                     playSound={playSound}
                     increaseScore={increaseScore}
                     changeStatus={changeStatus}
-                    switchFail={_ => changeStatus('fail')}
-                    switchWin={_ => changeStatus('win')}
+                    switchFail={() => changeStatus('fail')}
+                    switchWin={() => changeStatus('win')}
                 />
                 <Panel
                     {...scoreInfo}
                     {...gameFlags}
                     speedNum={speedNum}
-                    switchSound={switchSound}
                     isSoundEnable={isSoundEnable}
+                    switchSound={switchSound}
                     increaseSpeed={increaseSpeed}
-                    switchDarkMode={_ => switchGameFlags('isDarkMode')}
-                    switchPause={_ => changeStatus('pause')}
-                    switchSettings={_ => changeStatus('settings')}
+                    switchDarkMode={() => switchGameFlags('isDarkMode')}
+                    switchPause={() => changeStatus('pause')}
+                    switchSettings={() => changeStatus('settings')}
                 />
             </div>
-            {isMobileRef.current ?
+            {isMobile ?
                 <Controls
                     accentColor={accentColor}
                     changeDirection={changeDirection}/> : null}

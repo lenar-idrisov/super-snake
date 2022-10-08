@@ -1,4 +1,13 @@
-export const getKeydownKey = event => {
+import {
+    Point,
+    BaseSizes,
+    FoodOne,
+    SnakeLiveState,
+    SnakeOne,
+    BoxStyles
+} from "./customTypes";
+
+export const getKeydownKey = (event: KeyboardEvent) => {
     // учитываем только клавиши вверх/вниз/влево/вправо
     if ([
         'ArrowUp', 'ArrowDown',
@@ -10,19 +19,19 @@ export const getKeydownKey = event => {
     }
 }
 
-export const getReadyStyles = (snakeLive, baseSizes) => {
+export const getReadyStyles = (snakeLive: SnakeLiveState, baseSizes: BaseSizes) => {
     // масштабирование стилей
     let {snake, barriers, foodList} = snakeLive;
     const {cellSize, cellQuantity} = baseSizes;
     const grid = Array.from({length: cellQuantity}).fill(null);
     const box = {width: cellSize, height: cellSize};
-    const getPosition = e => ({
+    const getPosition = (e: SnakeOne| FoodOne | Point): BoxStyles => ({
         ...box,
         top: e.y,
         left: e.x,
     });
 
-    const grid_styles = grid.map(e => box);
+    const grid_styles = grid.map(() => box);
     const food_styles = foodList.map((e, i) => ({
         ...getPosition(e),
         backgroundColor: e.i,

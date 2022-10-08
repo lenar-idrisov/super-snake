@@ -1,21 +1,22 @@
 import {useState, useEffect} from 'react';
 import {getKeydownKey} from "../service/helpers";
+import {SpeedDXDY} from "../service/customTypes";
 
-export default _ => {
+export default () => {
     // направление хода змеи
-    const [dir, setDirection] = useState(null);
+    const [dir, setDirection] = useState('');
     // дельта, прибавляемая к координатам змеи при ее хождении,
     // (скорость змеи по оси x и y)
-    const [deltaXY, setDeltaXY] = useState(null);
+    const [speedDXDY, setSpeedDXDY] = useState<SpeedDXDY|null>(null);
 
-    useEffect(_ => {
+    useEffect(() => {
         document.addEventListener('keydown', keydownHandler);
-        return _ => {
+        return () => {
             document.removeEventListener('keydown', keydownHandler);
         }
     });
 
-    const getCorrectedDir = (newDirection) => {
+    const getCorrectedDir = (newDirection: string) => {
         let resultCourse = newDirection;
         // змея не может сразу в противоположном направлении начать ходить
         // исправляем на промежуточный курс (вверх или вправо)
@@ -29,24 +30,24 @@ export default _ => {
         return resultCourse;
     }
 
-    const changeDirection = newDirection => {
+    const changeDirection = (newDirection: string) => {
         const correctDir = getCorrectedDir(newDirection);
         if (newDirection !== dir) {
             // нужно, чтобы змея не успела сделать шаг в старом направлении
-            clearTimeout(window.snakeMoveTimerId);
-            changeDeltaXY(correctDir);
+            clearTimeout((window as any).snakeMoveTimerId);
+            changeSpeedDXDY(correctDir);
             setDirection(correctDir);
         }
     }
 
-    const keydownHandler = (event) => {
+    const keydownHandler = (event: KeyboardEvent) => {
         const newDir = getKeydownKey(event);
         if (newDir !== null && newDir !== dir) {
             changeDirection(newDir);
         }
     }
 
-    const changeDeltaXY = (newDir) => {
+    const changeSpeedDXDY = (newDir: string) => {
         let newDX, newDY;
 
         if (newDir === 'left') {
@@ -64,7 +65,7 @@ export default _ => {
         } else {
             return;
         }
-        setDeltaXY({
+        setSpeedDXDY({
             dx: newDX,
             dy: newDY
         });
@@ -72,7 +73,7 @@ export default _ => {
 
     return {
         dir,
-        deltaXY,
+        speedDXDY,
         changeDirection
     }
 }

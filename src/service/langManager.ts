@@ -15,12 +15,12 @@ const dictionary = [
 ]
 
 // возвращает переведенный на нужный язык текст
-export default function tr(message) {
+export default function tr(message: string) {
     let targetPair = dictionary.find(pair => pair[0] === message);
     if (!targetPair) {
         const fullMessage = 'not translated: ' + message;
-        console.log('%c' + fullMessage, `background: red; color: yellow; font-size: 15px`);
+        console.log('%c' + fullMessage, `background: red; color: yellow; font-size: 20px`);
     }
     targetPair = targetPair || [message, message];
-    return window.lang === 'en' ? targetPair[1] : targetPair[0];
+    return (window as any).lang === 'en' ? targetPair[1] : targetPair[0];
 }

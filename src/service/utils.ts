@@ -1,5 +1,5 @@
-export default  function randAB(min, max, excludedList = []) {
-    let randVal;
+export default function randAB(min: number, max: number, excludedList: number[] = []) {
+    let randVal: number;
     min = Math.ceil(min);
     max = Math.floor(max);
     let iterator = 0;

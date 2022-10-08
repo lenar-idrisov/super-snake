@@ -1,50 +1,51 @@
 import {useEffect, useRef} from 'react';
 import SnakeLive from "./SnakeLive";
+import {BoardProps, BaseSizes} from "../service/customTypes";
 
-export default function Board(props) {
+export default function Board(props: BoardProps) {
     // разеры клеточной зоны, где ходит змея
     // (ширина высота зоны, кол-во клеток, размер клетки)
-    const baseSizesRef = useRef();
+    const baseSizesRef = useRef<BaseSizes>();
 
-    useEffect(_ => {
+    useEffect(() => {
         baseSizesRef.current = getCalculatedSizes();
         props.changeStatus('init');
     }, []);
 
-    useEffect(_ => {
-        const showPause = _ => {
-            if (props.status === 'move') {
+    useEffect(() => {
+        const showPause = () => {
+            if (props.gameStatus === 'move') {
                 setTimeout(_ => {
                     props.advManager.showFullscreenAdv()
                     props.changeStatus('pause');
                 }, 300);
             }
         }
-        const showAdv = _ => {
-            if (props.status === 'move') {
+        const showAdv = () => {
+            if (props.gameStatus === 'move') {
                 props.changeStatus('pause');
                 props.advManager.showAdvBeforeExit(true)
             }
         }
-        const subscribe = _ => {
+        const subscribe = () => {
             // реклама при покидании вкладки
             window.addEventListener('blur', showPause);
             // реклама при выходе из игры
             window.addEventListener('resize', showAdv);
         }
-        const unSubscribe = _ => {
+        const unSubscribe = () => {
             // реклама при покидании вкладки
             window.removeEventListener('blur', showPause);
             // реклама при выходе из игры
             window.removeEventListener('resize', showAdv);
         }
         subscribe()
-        return _ => unSubscribe();
-    }, [props.status])
+        return () => unSubscribe();
+    }, [props.gameStatus])
 
     // исходя из ширины экрана рассчитываем размер клеточки зоны
     function getCalculatedSizes() {
-        const body = document.querySelector('html');
+        const body = document.querySelector('html') as HTMLHtmlElement;
         const device = {
             width: body.offsetWidth,
             height: body.offsetHeight

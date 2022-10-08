@@ -5,8 +5,9 @@ import ThemeLightIcon from "../assets/image/icons/themeLight.png";
 import Settings from "../assets/image/icons/settings.png";
 import PauseIcon from "../assets/image/icons/pause.png";
 import PlayIcon from "../assets/image/icons/play.png";
+import {PanelProps} from "../service/customTypes";
 
-export default function Panel(props) {
+export default function Panel(props: PanelProps) {
     return (
         <div className="panel">
             <div className="touch">
@@ -20,7 +21,7 @@ export default function Panel(props) {
                     <img src={!props.isDarkMode ? ThemeLightIcon : ThemeDarkIcon}/>
                 </button>
                 <button className="touch-button" onClick={props.switchPause}>
-                    <img src={props.status !== 'pause' ? PauseIcon : PlayIcon}/>
+                    <img src={props.gameStatus !== 'pause' ? PauseIcon : PlayIcon}/>
                 </button>
                 <button className="touch-button" onClick={props.increaseSpeed}>
                     <div className="touch-button_num">{props.speedNum}</div>

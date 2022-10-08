@@ -1,11 +1,12 @@
 import React from 'react';
 import tr from '../service/langManager'
+import {EndingProps} from "../service/customTypes";
 
 import WinEnd from '../assets/image/windows/win.png'
 import FailEnd from '../assets/image/windows/fail.png'
 import MoreGame from '../assets/image/windows/moreGame.png'
 
-export default function Ending(props) {
+export default function Ending(props: EndingProps) {
     return (
         <div className="modal">
             <div className="ending">
@@ -20,7 +21,7 @@ export default function Ending(props) {
                     </button>
                 </div>
                 <div className="window bottom-window">
-                    <object data={props.status === 'win' ? WinEnd : FailEnd}
+                    <object data={props.gameStatus === 'win' ? WinEnd : FailEnd}
                             className="image"/>
                     <button className="main-button"
                             style={{backgroundColor: props.accentColor}}

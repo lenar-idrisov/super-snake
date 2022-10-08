@@ -3,18 +3,27 @@ import randAB from "../service/utils";
 import {snakeColors} from "../service/colors";
 import barriersScheme from "../service/barriersScheme";
 import {getReadyStyles} from "../service/helpers";
+import {
+    SnakeLiveProps,
+    SnakeLiveState,
+    SnakeOne,
+    FoodOne,
+    BarrierUnit,
+    Point,
+    SpeedDXDY
+} from "../service/customTypes";
 
-export default function SnakeLive(props) {
-    const prevDirRef = useRef();
+export default function SnakeLive(props: SnakeLiveProps) {
+    const prevDirRef = useRef<string>();
     // горизонтальная и вертикальная скорости
-    const [snakeLive, setSnakeLive] = useState({
+    const [snakeLiveState, setSnakeLiveState] = useState<SnakeLiveState>({
         snake: [],
         foodList: [],
         barriers: []
     });
 
-    useEffect(_ => {
-        if (['init', 'restart'].includes(props.status)) {
+    useEffect(() => {
+        if (['init', 'restart'].includes(props.gameStatus)) {
             const {cellSize} = props.baseSizes;
             const snake = [
                 {x: 2, y: 10},
@@ -28,64 +37,64 @@ export default function SnakeLive(props) {
             const barriers = props.isHardMode ? getBarriers(snake, []) : [];
             const foodList = getFoodList(snake, barriers);
 
-            setSnakeLive({
+            setSnakeLiveState({
                 foodList,
                 barriers,
                 snake
             });
-            if (props.status === 'restart') {
+            if (props.gameStatus === 'restart') {
                 // запускаем, не показывая окно настроек
                 props.changeStatus('move');
             }
-        } else if (['pause', 'fail', 'win', 'settings'].includes(props.status)) {
+        } else if (['pause', 'fail', 'win', 'settings'].includes(props.gameStatus)) {
             setSnakeMove(false);
-        } else if (props.status === 'move') {
+        } else if (props.gameStatus === 'move') {
             setSnakeMove(true);
         }
-    }, [props.status]);
+    }, [props.gameStatus]);
 
-    useEffect(_ => {
+    useEffect(() => {
         // если ниче не поменялось - просто выходим
-        if ((props.isHardMode && snakeLive.barriers.length) ||
-            (!props.isHardMode && !snakeLive.barriers.length)) return;
-        setSnakeLive({
-            ...snakeLive,
+        if ((props.isHardMode && snakeLiveState.barriers.length) ||
+            (!props.isHardMode && !snakeLiveState.barriers.length)) return;
+        setSnakeLiveState({
+            ...snakeLiveState,
             barriers: props.isHardMode ?
-                getBarriers(snakeLive.snake, snakeLive.foodList) : []
+                getBarriers(snakeLiveState.snake, snakeLiveState.foodList) : []
         });
     }, [props.isHardMode])
 
 
-    useEffect(_ => {
-        if (props.status !== 'move') return;
+    useEffect(() => {
+        if (props.gameStatus !== 'move') return;
         if (!prevDirRef.current) prevDirRef.current = props.dir;
         if (prevDirRef.current !== props.dir) {
+            prevDirRef.current = props.dir;
             // запускает змею после смены курса
             moveSnake();
         } else {
             // двигает змею вперед
             setSnakeMove(true);
         }
-        prevDirRef.current = props.dir;
-        return _ => setSnakeMove(false);
-    }, [snakeLive, props.dir])
+        return () => setSnakeMove(false);
+    }, [snakeLiveState, props.dir])
 
-    function setSnakeMove(isMove) {
-        clearTimeout(window.snakeMoveTimerId);
+    function setSnakeMove(isMove: boolean) {
+        clearTimeout((window as any).snakeMoveTimerId);
         if (isMove) {
             // таймер, управляющий движением змейки
-            window.snakeMoveTimerId = setTimeout(
-                _ => moveSnake(),
+            (window as any).snakeMoveTimerId = setTimeout(
+                () => moveSnake(),
                 props.realSpeed
             );
         }
     }
 
     function moveSnake() {
-        let newSnake = [...snakeLive.snake];
-        let newFoodList = [...snakeLive.foodList];
+        let newSnake = [...snakeLiveState.snake];
+        let newFoodList = [...snakeLiveState.foodList];
         const {cellSize} = props.baseSizes;
-        let {dx, dy} = props.deltaXY;
+        let {dx, dy} = props.speedDXDY as SpeedDXDY;
         dx *= cellSize;
         dy *= cellSize;
         let head = {
@@ -94,11 +103,14 @@ export default function SnakeLive(props) {
             color: newSnake[1].color
         };
         let isWall = checkWall(head.x, head.y);
-        let eaten;
+        let eaten!: FoodOne;
 
         newFoodList.forEach(e => {
-            if (head.x === e.x && head.y === e.y) eaten = e;
+            if (head.x === e.x && head.y === e.y) {
+                eaten = e;
+            }
         })
+
         // больше предохранитель, чем необходимость
         if (eaten) {
             props.increaseScore();
@@ -114,8 +126,8 @@ export default function SnakeLive(props) {
                 newFoodList = newFoodList.filter(e => !Object.is(e, eaten));
                 newFoodList.push(getFood());
                 props.playSound('eat');
-                setSnakeLive({
-                    ...snakeLive,
+                setSnakeLiveState({
+                    ...snakeLiveState,
                     snake: newSnake,
                     foodList: newFoodList,
                 });
@@ -128,17 +140,21 @@ export default function SnakeLive(props) {
             } else {
                 newSnake.unshift(head);
                 newSnake.pop();
-                setSnakeLive({
-                    ...snakeLive,
+                setSnakeLiveState({
+                    ...snakeLiveState,
                     snake: newSnake,
                 });
             }
         }
     }
 
-    function checkWall(headX, headY) {
+    /**
+     @param {number} headX координата x головы змейки
+     @param {number} headY координата y головы змейки
+     * */
+    function checkWall(headX: number, headY: number) {
         const {cellSize, activeWidth, activeHeight} = props.baseSizes;
-        let {snake, barriers} = snakeLive;
+        let {snake, barriers} = snakeLiveState;
         // проверяем, не ударилась ли змея о саму себя
         for (let i = 3; i < snake.length; i++) {
             if (headX === snake[i].x && headY === snake[i].y) {
@@ -154,35 +170,39 @@ export default function SnakeLive(props) {
         return barriers.flat().some(cell => (headX === cell.x && headY === cell.y));
     }
 
-    function getFoodList(snakeInitial, barriersInitial) {
+    function getFoodList(snakeInitial: SnakeOne[], barriersInitial: BarrierUnit[]) {
         const foodQty = randAB(10, 15);
-        const foodList = [];
+        const foodList = [] as FoodOne[];
 
-        const createFood = _ => {
+        const createFood = () => {
             const newFood = getFood(foodList, snakeInitial, barriersInitial);
             foodList.push(newFood)
         }
 
-        Array.from({length: foodQty}, _ => null)
+        Array.from({length: foodQty}, () => null)
             .forEach(e => createFood());
         return foodList;
     }
 
     // формируем квадратик(еду) различного цвета с различным местоположением
-    function getFood(foodListInitial, snakeInitial, barriersInitial) {
+    function getFood(
+        existFoodList?: FoodOne[],
+        snakeInitial?: SnakeOne[],
+        barriersInitial?: BarrierUnit[]
+    ): FoodOne {
         const {cellSize, activeWidth, activeHeight} = props.baseSizes;
-        let {snake, foodList, barriers} = snakeLive;
+        let {snake, foodList, barriers} = snakeLiveState;
 
         let n = randAB(0, 7); // любой из 8 цветов
         let i = snakeColors[n].i // цвет квадратика
         let j = snakeColors[n].j // цвет рамки квадратика
         let x, y;
 
-        const snakeResult = snakeInitial ? snakeInitial : snake;
-        const barriersResult = barriersInitial ? barriersInitial : barriers;
-        const foodListResult = foodListInitial ? foodListInitial : foodList;
+        const snakeResult = snakeInitial || snake;
+        const barriersResult = barriersInitial || barriers;
+        const foodListResult = existFoodList || foodList;
 
-        const isCorrectCell = (x, y) => (
+        const isCorrectCell = (x: number, y: number) => (
             // чтобы еда не попала в зону змеи
             !snakeResult.some(e => (x === e.x && y === e.y)) &&
             // чтобы координаты еды не совпали с барьерами
@@ -198,7 +218,7 @@ export default function SnakeLive(props) {
         return {x, y, i, j};
     }
 
-    function getRandBarrier() {
+    function getRandBarrier(): BarrierUnit {
         const {cellSize} = props.baseSizes;
         // получаем случайную фигуру
         const figureIndex = randAB(0, barriersScheme.length - 1);
@@ -211,22 +231,27 @@ export default function SnakeLive(props) {
         }));
     }
 
-    function getCorrectBarrier(barriers, snake, foodList) {
+    function getCorrectBarrier(
+        existBarriers: BarrierUnit[],
+        snakeInitial: SnakeOne[],
+        foodListInitial: FoodOne[]
+    ): BarrierUnit {
         const {cellSize, activeWidth, activeHeight} = props.baseSizes;
         // проверка, что все клетки барьера в пределах клеточной зоны
         // и не совпадают со змейкой и с другими барьерами
-        const isCorrectBarrierCell = ({x, y}) => (
+        const isCorrectBarrierCell = ({x, y}: Point) => (
             x >= 0 && x <= activeWidth - cellSize && y >= 0 && y <= activeHeight - cellSize &&
-            !snake.some(cell => (x === cell.x && y === cell.y)) &&
-            !barriers.flat().some(cell => (x === cell.x && y === cell.y)) &&
-            !foodList.flat().some(cell => (x === cell.x && y === cell.y))
+            !snakeInitial.some(cell => (x === cell.x && y === cell.y)) &&
+            !existBarriers.flat().some(cell => (x === cell.x && y === cell.y)) &&
+            !foodListInitial.flat().some(cell => (x === cell.x && y === cell.y))
         );
         let testBarrier;
         let newBarrier = getRandBarrier();
         let count = 0;
         let isFail;
         // смещение барьера по вертикали и горизонтали в пределах клеточной зоны
-        let dx, dy;
+        let dx: number;
+        let dy: number;
         do {
             dx = Math.round(randAB(-cellSize * 2, activeWidth - cellSize) / cellSize) * cellSize;
             dy = Math.round(randAB(-cellSize * 2, activeHeight - cellSize) / cellSize) * cellSize;
@@ -241,17 +266,19 @@ export default function SnakeLive(props) {
         return !isFail ? testBarrier : [];
     }
 
-    function getBarriers(snake, foodList) {
+    function getBarriers(
+        snakeInitial: SnakeOne[],
+        foodListInitial: FoodOne[]): BarrierUnit[] {
         const barrierQty = randAB(3, 10);
-        const barriers = [];
+        const barriers = [] as BarrierUnit[];
 
-        const createBarrier = _ => {
-            const newBarrier = getCorrectBarrier(barriers, snake, foodList);
+        const createBarrier = () => {
+            const newBarrier = getCorrectBarrier(barriers, snakeInitial, foodListInitial);
             barriers.push(newBarrier)
         }
 
-        Array.from({length: barrierQty}, _ => null)
-            .forEach(e => createBarrier());
+        Array.from({length: barrierQty}, () => null)
+            .forEach(() => createBarrier());
         return barriers;
     }
 
@@ -261,8 +288,8 @@ export default function SnakeLive(props) {
         food_styles,
         barrier_styles,
         snake_styles
-    } = getReadyStyles(snakeLive, props.baseSizes);
-    const getBox = (className, style, key) => (
+    } = getReadyStyles(snakeLiveState, props.baseSizes);
+    const getBox = (className: string, style: object, key: number) => (
         <div
             className={className}
             style={style}

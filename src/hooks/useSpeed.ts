@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-export default _ => {
+export default () => {
     const [speedNum, setSpeedNum] = useState(1);
     const [realSpeed, setRealSpeed] = useState(getSpeed(1));
 
@@ -13,12 +13,15 @@ export default _ => {
         setRealSpeed(getSpeed(newSpeedNum));
     }
 
-    function getSpeed(speedNum) {
-        let speedResult;
-        if (speedNum === 1) speedResult = 290;
-        if (speedNum === 2) speedResult = 250;
-        if (speedNum === 3) speedResult = 200;
-        if (speedNum === 4) speedResult = 150;
+    function getSpeed(speedNum: number) {
+        let speedResult = 290;
+        if (speedNum === 2) {
+            speedResult = 250;
+        } else if (speedNum === 3) {
+            speedResult = 200;
+        } else if (speedNum === 4) {
+            speedResult = 150;
+        }
         return speedResult;
     }
 
