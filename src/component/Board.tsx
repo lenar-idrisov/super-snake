@@ -2,7 +2,7 @@ import {useEffect, useRef} from 'react';
 import SnakeLive from "./SnakeLive";
 import {BoardProps, BaseSizes} from "../service/customTypes";
 
-export default function Board(props: BoardProps) {
+export default function Board(props: Readonly<BoardProps>) {
     // разеры клеточной зоны, где ходит змея
     // (ширина высота зоны, кол-во клеток, размер клетки)
     const baseSizesRef = useRef<BaseSizes>();

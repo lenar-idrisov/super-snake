@@ -13,7 +13,7 @@ import {
     SpeedDXDY
 } from "../service/customTypes";
 
-export default function SnakeLive(props: SnakeLiveProps) {
+export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
     const prevDirRef = useRef<string>();
     // горизонтальная и вертикальная скорости
     const [snakeLiveState, setSnakeLiveState] = useState<SnakeLiveState>({

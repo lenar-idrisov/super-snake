@@ -5,10 +5,9 @@ import ArrowDown from "../assets/image/icons/arrowDown.png";
 import {ControlsProps} from "../service/customTypes";
 
 export default function RightMenu(props: ControlsProps) {
-    const accentColor = props.accentColor;
     const Control = ({handler, icon} : {handler: () => void, icon: any}) =>
         <button className="control"
-                style={{backgroundColor: accentColor}}
+                style={{backgroundColor: props.accentColor}}
                 onClick={handler}>
             <img src={icon}/>
         </button>;
