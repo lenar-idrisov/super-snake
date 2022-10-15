@@ -1,3 +1,5 @@
+import {showError} from "./utils";
+
 const dictionary = [
     ['Войдите в аккаунт, чтобы оценить игру', 'Log in to your account to rate the game'],
     ['Вы уже оценивали игру ранее', 'Have you evaluated the game before'],
@@ -19,7 +21,7 @@ export default function tr(message: string) {
     let targetPair = dictionary.find(pair => pair[0] === message);
     if (!targetPair) {
         const fullMessage = 'not translated: ' + message;
-        console.log('%c' + fullMessage, `background: red; color: yellow; font-size: 20px`);
+        showError(fullMessage);
     }
     targetPair = targetPair || [message, message];
     return (window as any).lang === 'en' ? targetPair[1] : targetPair[0];

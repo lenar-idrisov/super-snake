@@ -1,18 +1,19 @@
-import SoundOnIcon from "../assets/image/icons/soundOn.png";
-import SoundOffIcon from "../assets/image/icons/soundOff.png";
-import ThemeDarkIcon from "../assets/image/icons/themeDark.png";
-import ThemeLightIcon from "../assets/image/icons/themeLight.png";
-import Settings from "../assets/image/icons/settings.png";
-import PauseIcon from "../assets/image/icons/pause.png";
-import PlayIcon from "../assets/image/icons/play.png";
-import {PanelProps} from "../service/customTypes";
+import SoundOnIcon from "../../assets/image/icons/soundOn.png";
+import SoundOffIcon from "../../assets/image/icons/soundOff.png";
+import ThemeDarkIcon from "../../assets/image/icons/themeDark.png";
+import ThemeLightIcon from "../../assets/image/icons/themeLight.png";
+import Settings from "../../assets/image/icons/settings.png";
+import PauseIcon from "../../assets/image/icons/pause.png";
+import PlayIcon from "../../assets/image/icons/play.png";
+import {PanelProps} from "../../types/customTypes";
+import './panel.css';
 
 export default function Panel(props: PanelProps) {
     return (
         <div className="panel">
             <div className="touch">
                 <button className="touch-button" onClick={props.switchSound}>
-                    <img src={props.isSoundEnable ? SoundOnIcon : SoundOffIcon}/>
+                    <img src={props.isSoundDisable ? SoundOffIcon : SoundOnIcon}/>
                 </button>
                 <button className="touch-button" onClick={props.switchSettings}>
                     <img src={Settings}/>

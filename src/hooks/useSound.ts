@@ -16,7 +16,7 @@ interface SoundList {
 
 export default () => {
     const soundsRef = useRef<SoundList>();
-    const [isSoundEnable, setSoundEnable] = useState(true);
+    const [isSoundDisable, setSoundEnable] = useState(false);
 
     useEffect(() => {
         // предварительно загружаем звуки
@@ -29,9 +29,9 @@ export default () => {
     }, [])
 
     const switchSound = () => {
-        setSoundEnable(!isSoundEnable);
+        setSoundEnable(!isSoundDisable);
         for (const key in soundsRef.current) {
-            soundsRef.current[key].volume = isSoundEnable ? 0 : 1;
+            soundsRef.current[key].volume = isSoundDisable ? 0 : 1;
         }
     }
 
@@ -43,7 +43,7 @@ export default () => {
     }
 
     return {
-        isSoundEnable,
+        isSoundDisable,
         playSound,
         switchSound
     }

@@ -1,13 +1,21 @@
 import {useState, useEffect} from 'react';
 import {getKeydownKey} from "../service/helpers";
-import {SpeedDXDY} from "../service/customTypes";
+import {SpeedXY} from "../types/customTypes";
+
+enum Dirs {
+    Right= 'right',
+    Left = 'left',
+    Up = 'up',
+    Down = 'down'
+}
+
 
 export default () => {
     // направление хода змеи
     const [dir, setDirection] = useState('');
     // дельта, прибавляемая к координатам змеи при ее хождении,
     // (скорость змеи по оси x и y)
-    const [speedDXDY, setSpeedDXDY] = useState<SpeedDXDY|null>(null);
+    const [speedXY, setSpeedXY] = useState<SpeedXY|null>(null);
 
     useEffect(() => {
         document.addEventListener('keydown', keydownHandler);
@@ -20,12 +28,12 @@ export default () => {
         let resultCourse = newDirection;
         // змея не может сразу в противоположном направлении начать ходить
         // исправляем на промежуточный курс (вверх или вправо)
-        if ((dir === 'right' && newDirection === 'left') ||
-            (dir === 'left' && newDirection === 'right')) {
-            resultCourse = 'up';
-        } else if ((dir === 'up' && newDirection === 'down') ||
-            (dir === 'down' && newDirection === 'up')) {
-            resultCourse = 'right';
+        if ((dir === Dirs.Right && newDirection === Dirs.Left) ||
+            (dir === Dirs.Left && newDirection === Dirs.Right)) {
+            resultCourse = Dirs.Up;
+        } else if ((dir === Dirs.Up && newDirection === Dirs.Down) ||
+            (dir === Dirs.Down && newDirection === Dirs.Up)) {
+            resultCourse = Dirs.Right;
         }
         return resultCourse;
     }
@@ -35,7 +43,7 @@ export default () => {
         if (newDirection !== dir) {
             // нужно, чтобы змея не успела сделать шаг в старом направлении
             clearTimeout((window as any).snakeMoveTimerId);
-            changeSpeedDXDY(correctDir);
+            changeSpeedXY(correctDir);
             setDirection(correctDir);
         }
     }
@@ -47,33 +55,32 @@ export default () => {
         }
     }
 
-    const changeSpeedDXDY = (newDir: string) => {
+    const changeSpeedXY = (newDir: string) => {
         let newDX, newDY;
 
-        if (newDir === 'left') {
+        if (newDir === Dirs.Left) {
             newDX = -1;
             newDY = 0
-        } else if (newDir === 'right') {
+        } else if (newDir === Dirs.Right) {
             newDX = 1;
             newDY = 0
-        } else if (newDir === 'up') {
+        } else if (newDir === Dirs.Up) {
             newDX = 0;
             newDY = -1
-        } else if (newDir === 'down') {
+        } else if (newDir === Dirs.Down) {
             newDX = 0;
             newDY = 1
         } else {
             return;
         }
-        setSpeedDXDY({
+        setSpeedXY({
             dx: newDX,
             dy: newDY
         });
     }
 
     return {
-        dir,
-        speedDXDY,
+        speedXY,
         changeDirection
     }
 }

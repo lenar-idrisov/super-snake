@@ -1,20 +1,22 @@
 import {useState, useEffect, useRef} from 'react';
-import randAB from "../service/utils";
-import {snakeColors} from "../service/colors";
-import barriersScheme from "../service/barriersScheme";
-import {getReadyStyles} from "../service/helpers";
+import {randAB} from "../../service/utils";
+import {snakeColors} from "../../service/colors";
+import barriersScheme from "../../service/barriersScheme";
+import {getReadyStyles} from "../../service/helpers";
 import {
     SnakeLiveProps,
     SnakeLiveState,
-    SnakeOne,
+    SnakeSlice,
     FoodOne,
     BarrierUnit,
     Point,
-    SpeedDXDY
-} from "../service/customTypes";
+    SpeedXY
+} from "../../types/customTypes";
+import './snakeLive.css';
+
 
 export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
-    const prevDirRef = useRef<string>();
+    const prevSpeedXYRef = useRef<SpeedXY|null>();
     // горизонтальная и вертикальная скорости
     const [snakeLiveState, setSnakeLiveState] = useState<SnakeLiveState>({
         snake: [],
@@ -67,9 +69,9 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
 
     useEffect(() => {
         if (props.gameStatus !== 'move') return;
-        if (!prevDirRef.current) prevDirRef.current = props.dir;
-        if (prevDirRef.current !== props.dir) {
-            prevDirRef.current = props.dir;
+        if (!prevSpeedXYRef.current) prevSpeedXYRef.current = props.speedXY;
+        if (prevSpeedXYRef.current !== props.speedXY) {
+            prevSpeedXYRef.current = props.speedXY;
             // запускает змею после смены курса
             moveSnake();
         } else {
@@ -77,7 +79,7 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
             setSnakeMove(true);
         }
         return () => setSnakeMove(false);
-    }, [snakeLiveState, props.dir])
+    }, [snakeLiveState, props.speedXY])
 
     function setSnakeMove(isMove: boolean) {
         clearTimeout((window as any).snakeMoveTimerId);
@@ -94,7 +96,7 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
         let newSnake = [...snakeLiveState.snake];
         let newFoodList = [...snakeLiveState.foodList];
         const {cellSize} = props.baseSizes;
-        let {dx, dy} = props.speedDXDY as SpeedDXDY;
+        let {dx, dy} = props.speedXY as SpeedXY;
         dx *= cellSize;
         dy *= cellSize;
         let head = {
@@ -170,7 +172,7 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
         return barriers.flat().some(cell => (headX === cell.x && headY === cell.y));
     }
 
-    function getFoodList(snakeInitial: SnakeOne[], barriersInitial: BarrierUnit[]) {
+    function getFoodList(snakeInitial: SnakeSlice[], barriersInitial: BarrierUnit[]) {
         const foodQty = randAB(10, 15);
         const foodList = [] as FoodOne[];
 
@@ -187,7 +189,7 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
     // формируем квадратик(еду) различного цвета с различным местоположением
     function getFood(
         existFoodList?: FoodOne[],
-        snakeInitial?: SnakeOne[],
+        snakeInitial?: SnakeSlice[],
         barriersInitial?: BarrierUnit[]
     ): FoodOne {
         const {cellSize, activeWidth, activeHeight} = props.baseSizes;
@@ -233,7 +235,7 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
 
     function getCorrectBarrier(
         existBarriers: BarrierUnit[],
-        snakeInitial: SnakeOne[],
+        snakeInitial: SnakeSlice[],
         foodListInitial: FoodOne[]
     ): BarrierUnit {
         const {cellSize, activeWidth, activeHeight} = props.baseSizes;
@@ -267,7 +269,7 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
     }
 
     function getBarriers(
-        snakeInitial: SnakeOne[],
+        snakeInitial: SnakeSlice[],
         foodListInitial: FoodOne[]): BarrierUnit[] {
         const barrierQty = randAB(3, 10);
         const barriers = [] as BarrierUnit[];

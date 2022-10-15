@@ -1,10 +1,11 @@
 import React from 'react';
-import tr from '../service/langManager'
-import {EndingProps} from "../service/customTypes";
+import tr from '../../service/langManager'
+import {EndingProps} from "../../types/customTypes";
 
-import WinEnd from '../assets/image/windows/win.png'
-import FailEnd from '../assets/image/windows/fail.png'
-import MoreGame from '../assets/image/windows/moreGame.png'
+import WinEnd from '../../assets/image/windows/win.png'
+import FailEnd from '../../assets/image/windows/fail.png'
+import MoreGame from '../../assets/image/windows/moreGame.png'
+import './ending.css';
 
 export default function Ending(props: EndingProps) {
     return (

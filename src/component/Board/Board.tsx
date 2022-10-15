@@ -1,6 +1,7 @@
 import {useEffect, useRef} from 'react';
-import SnakeLive from "./SnakeLive";
-import {BoardProps, BaseSizes} from "../service/customTypes";
+import SnakeLive from "../SnakeLive/SnakeLive";
+import {BoardProps, BaseSizes} from "../../types/customTypes";
+import './board.css';
 
 export default function Board(props: Readonly<BoardProps>) {
     // разеры клеточной зоны, где ходит змея

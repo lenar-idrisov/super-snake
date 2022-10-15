@@ -1,40 +1,41 @@
-import {useState, useEffect, useRef} from 'react';
-import Settings from './component/Settings'
-import Controls from './component/Controls';
-import Pause from './component/Pause';
-import Panel from './component/Panel';
-import Ending from "./component/Ending";
-import Board from "./component/Board";
+import {useState} from 'react';
+import Settings from './component/Settings/Settings'
+import Controls from './component/Controls/Controls';
+import Pause from './component/Pause/Pause';
+import Panel from './component/Panel/Panel';
+import Ending from "./component/Ending/Ending";
+import Board from "./component/Board/Board";
 
 import useDirection from './hooks/useDirection';
 import useSound from "./hooks/useSound";
 import useSpeed from "./hooks/useSpeed";
 
-import randAB from "./service/utils";
+import {randAB} from "./service/utils";
 import {themeColors} from './service/colors';
-import './scss/App.css';
-import {AppProps, GameFlags} from "./service/customTypes";
+import {AppProps, GameFlags, GameStatusList} from "./types/customTypes";
+import './App.css';
 
 
 export default function App({advManager, isMobile}: AppProps) {
-    // init/move/pause/fail/win/settings/restart
     const [gameStatus, setStatus] = useState('');
     // цвет кнопок управления
     const [accentColor, setAccentColor] = useState('');
     // цвет фона игры
     const [backColorIndex, setBackColor] = useState(0);
+
     const [scoreInfo, setScoreInfo] = useState(() => getInitialScoreInfo());
     const [gameFlags, setGameFlags] = useState<GameFlags>({
         isHardMode: false,
         isAdvWatched: false,
         isDarkMode: false,
+        isSoundDisable: false,
     });
     const {speedNum, realSpeed, increaseSpeed} = useSpeed();
-    const {dir, speedDXDY, changeDirection} = useDirection();
-    const {isSoundEnable, switchSound, playSound} = useSound();
+    const {speedXY, changeDirection} = useDirection();
+    const {isSoundDisable, switchSound, playSound} = useSound();
 
 
-    function changeStatus(newStatus: string) {
+    function changeStatus(newStatus: GameStatusList) {
         if (['init', 'restart'].includes(newStatus)) {
             changeDirection('right');
             setBackColor(randAB(0, themeColors.length));
@@ -53,7 +54,7 @@ export default function App({advManager, isMobile}: AppProps) {
         }
     }
 
-    function switchGameFlags(flagName: string) {
+    function switchGameFlags(flagName: keyof GameFlags) {
         setGameFlags({
             ...gameFlags,
             [flagName]: !(gameFlags[flagName])
@@ -106,8 +107,7 @@ export default function App({advManager, isMobile}: AppProps) {
                     {...gameFlags}
                     advManager={advManager}
                     gameStatus={gameStatus}
-                    speedDXDY={speedDXDY}
-                    dir={dir}
+                    speedXY={speedXY}
                     realSpeed={realSpeed}
                     changeDirection={changeDirection}
                     playSound={playSound}
@@ -119,8 +119,9 @@ export default function App({advManager, isMobile}: AppProps) {
                 <Panel
                     {...scoreInfo}
                     {...gameFlags}
+                    gameStatus={gameStatus}
                     speedNum={speedNum}
-                    isSoundEnable={isSoundEnable}
+                    isSoundDisable={isSoundDisable}
                     switchSound={switchSound}
                     increaseSpeed={increaseSpeed}
                     switchDarkMode={() => switchGameFlags('isDarkMode')}

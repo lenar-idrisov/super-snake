@@ -3,9 +3,9 @@ import {
     BaseSizes,
     FoodOne,
     SnakeLiveState,
-    SnakeOne,
+    SnakeSlice,
     BoxStyles
-} from "./customTypes";
+} from "../types/customTypes";
 
 export const getKeydownKey = (event: KeyboardEvent) => {
     // учитываем только клавиши вверх/вниз/влево/вправо
@@ -25,7 +25,7 @@ export const getReadyStyles = (snakeLive: SnakeLiveState, baseSizes: BaseSizes) 
     const {cellSize, cellQuantity} = baseSizes;
     const grid = Array.from({length: cellQuantity}).fill(null);
     const box = {width: cellSize, height: cellSize};
-    const getPosition = (e: SnakeOne| FoodOne | Point): BoxStyles => ({
+    const getPosition = (e: SnakeSlice| FoodOne | Point): BoxStyles => ({
         ...box,
         top: e.y,
         left: e.x,

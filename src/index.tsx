@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './scss/App.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {getAdvManager} from './service/advUtils';
+import {Provider} from "react-redux";
+import {store} from "./store";
 
 
 const root = ReactDOM.createRoot(
@@ -16,11 +17,13 @@ const isMobile = (document.querySelector('html') as HTMLHtmlElement).offsetWidth
 
 advManager.init(() => {
     root.render(
-        <React.StrictMode>
-            <App
-                advManager={advManager}
-                isMobile={isMobile}/>
-        </React.StrictMode>
+        <Provider store={store}>
+            <React.StrictMode>
+                <App
+                    advManager={advManager}
+                    isMobile={isMobile}/>
+            </React.StrictMode>
+        </Provider>
     );
     reportWebVitals();
 });

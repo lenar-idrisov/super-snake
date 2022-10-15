@@ -1,7 +1,8 @@
 import React from 'react';
-import {themeColors} from '../service/colors';
-import tr from '../service/langManager';
-import {SettingsProps} from "../service/customTypes";
+import {themeColors} from '../../service/colors';
+import tr from '../../service/langManager';
+import {SettingsProps} from "../../types/customTypes";
+import './settings.css';
 
 export default function Settings(props: SettingsProps) {
     const showAfterWatchAdv = (callback: Function) => {

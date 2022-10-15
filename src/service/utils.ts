@@ -1,4 +1,4 @@
-export default function randAB(min: number, max: number, excludedList: number[] = []) {
+export function randAB(min: number, max: number, excludedList: number[] = []) {
     let randVal: number;
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -10,4 +10,8 @@ export default function randAB(min: number, max: number, excludedList: number[] 
         //logBeauty('randAB', 'while loop', 1);
     } while (excludedList.some(i => randVal === i));
     return randVal;
+}
+
+export function showError (message: string) {
+    console.log('%c' + message, `background: red; color: yellow; font-size: 25px`)
 }

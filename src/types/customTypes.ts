@@ -1,14 +1,23 @@
-import YandexManager from "./adv/YandexManager";
-import EmptyManager from "./adv/EmptyManager";
+import YandexManager from "../service/adv/YandexManager";
+import EmptyManager from "../service/adv/EmptyManager";
 
-type FuncWithStringParam = (value: string) => void;
-type FuncEmptyVoid = () => void;
+type FuncWithParam = (value: any) => any;
+type FuncEmptyVoid = () => any;
+
+export type GameStatusList = 'init' | 'move' | 'pause' | 'fail' |
+    'win' | 'settings' | 'restart';
 export type AdvManager = YandexManager | EmptyManager;
 
+
 // скорость змейки по оси X и Y
-export interface SpeedDXDY {
+export interface SpeedXY {
     dx: number;
     dy: number
+}
+
+export interface Speed {
+    speedNum: number,
+    real: number|null
 }
 
 export interface ScoreInfo {
@@ -17,12 +26,11 @@ export interface ScoreInfo {
 }
 
 export interface GameFlags {
-    [index: string]: any;
-
     // режим игры с барьерами(true) и без(false)
     isHardMode: boolean;
     isAdvWatched: boolean;
     isDarkMode: boolean;
+    isSoundDisable: boolean;
 }
 
 export interface AppProps {
@@ -43,8 +51,9 @@ export interface SettingsProps extends GameFlags {
 }
 
 export interface PanelProps extends ScoreInfo, GameFlags {
+    gameStatus: string;
     speedNum: number;
-    isSoundEnable: boolean;
+    isSoundDisable: boolean;
     switchSound: FuncEmptyVoid
     increaseSpeed: FuncEmptyVoid;
     switchDarkMode: FuncEmptyVoid;
@@ -59,7 +68,7 @@ export interface PauseProps {
 
 export interface ControlsProps {
     accentColor: string;
-    changeDirection: FuncWithStringParam;
+    changeDirection: FuncWithParam;
 }
 
 export interface EndingProps {
@@ -71,14 +80,15 @@ export interface EndingProps {
 
 export interface BoardProps extends ScoreInfo, GameFlags {
     advManager: AdvManager;
+    isHardMode: boolean;
+    isDarkMode: boolean;
     gameStatus: string;
-    speedDXDY: SpeedDXDY | null;
-    dir: string;
     realSpeed: number;
-    changeDirection: FuncWithStringParam;
-    playSound: FuncWithStringParam;
+    speedXY: SpeedXY | null;
+    changeDirection: FuncWithParam;
+    playSound: FuncWithParam;
     increaseScore: FuncEmptyVoid;
-    changeStatus: FuncWithStringParam;
+    changeStatus: FuncWithParam;
     switchFail: FuncEmptyVoid;
     switchWin: FuncEmptyVoid;
 }
@@ -100,7 +110,7 @@ export interface Point {
 }
 
 // один сегмент змейки
-export interface SnakeOne extends Point {
+export interface SnakeSlice extends Point {
     color: string
 }
 
@@ -116,7 +126,7 @@ export interface FoodOne extends Point {
 export type BarrierUnit = Point[];
 
 export interface SnakeLiveState {
-    snake: SnakeOne[],
+    snake: SnakeSlice[],
     foodList: FoodOne[],
     barriers: BarrierUnit[]
 }
@@ -128,4 +138,20 @@ export interface BoxStyles {
     left: number,
     backgroundColor?: string,
     borderColor?: string,
+}
+
+export interface Action {
+    type: string;
+    payload: any
+}
+
+export interface AppState {
+    scoreInfo: ScoreInfo;
+    gameFlags: GameFlags;
+    speed: Speed;
+    gameStatus: string;
+    accentColor: string;
+    backColorIndex: number;
+    isSoundDisable: boolean;
+    speedXY: SpeedXY | null;
 }

@@ -1,7 +1,8 @@
-import PauseIcon from "../assets/image/windows/pause.png";
-import tr from "../service/langManager";
-import Play from "../assets/image/icons/play.png";
-import {PauseProps} from "../service/customTypes";
+import PauseIcon from "../../assets/image/windows/pause.png";
+import tr from "../../service/langManager";
+import Play from "../../assets/image/icons/play.png";
+import {PauseProps} from "../../types/customTypes";
+import './pause.css';
 
 export default function Pause(props: PauseProps) {
     return (
