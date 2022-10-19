@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {getKeydownKey} from "../service/helpers";
-import {SpeedXY} from "../types/customTypes";
+import {SpeedXY} from "../types/functionTypes";
 
 enum Dirs {
     Right= 'right',

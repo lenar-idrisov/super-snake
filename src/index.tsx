@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {createContext} from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './component/Game/Game';
 import reportWebVitals from './reportWebVitals';
 import {getAdvManager} from './service/advUtils';
 import {Provider} from "react-redux";
 import {store} from "./store";
-
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -13,15 +12,16 @@ const root = ReactDOM.createRoot(
 //console.log(window.location);
 //console.log(getUrlParams());
 const advManager = getAdvManager();
-const isMobile = (document.querySelector('html') as HTMLHtmlElement).offsetWidth < 500;
+export const AdvContext = createContext(advManager);
+
 
 advManager.init(() => {
     root.render(
         <Provider store={store}>
             <React.StrictMode>
-                <App
-                    advManager={advManager}
-                    isMobile={isMobile}/>
+                <AdvContext.Provider value={advManager}>
+                    <App />
+                </AdvContext.Provider>
             </React.StrictMode>
         </Provider>
     );

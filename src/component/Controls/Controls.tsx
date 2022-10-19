@@ -2,7 +2,7 @@ import ArrowLeft from "../../assets/image/icons/arrowLeft.png";
 import ArrowRight from "../../assets/image/icons/arrowRight.png";
 import ArrowUp from "../../assets/image/icons/arrowUp.png";
 import ArrowDown from "../../assets/image/icons/arrowDown.png";
-import {ControlsProps} from "../../types/customTypes";
+import {ControlsProps} from "../../types/propsTypes";
 import './controls.css';
 
 export default function RightMenu(props: ControlsProps) {

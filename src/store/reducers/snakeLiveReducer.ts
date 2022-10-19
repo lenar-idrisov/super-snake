@@ -1,8 +1,10 @@
 import {combineReducers} from "@reduxjs/toolkit";
-import {flagsReducer} from "./flagsReducer";
+import {snakeReducer} from "./snakReducer";
+import {appReducer} from "./appReducer";
 
 export const rootReducer = combineReducers({
-    flags: flagsReducer
+    snake: snakeReducer,
+    app: appReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>;

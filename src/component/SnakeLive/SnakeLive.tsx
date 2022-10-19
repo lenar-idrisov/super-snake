@@ -4,18 +4,19 @@ import {snakeColors} from "../../service/colors";
 import barriersScheme from "../../service/barriersScheme";
 import {getReadyStyles} from "../../service/helpers";
 import {
-    SnakeLiveProps,
     SnakeLiveState,
     SnakeSlice,
     FoodOne,
     BarrierUnit,
     Point,
     SpeedXY
-} from "../../types/customTypes";
+} from "../../types/functionTypes";
+import {SnakeLiveProps} from '../../types/propsTypes';
 import './snakeLive.css';
 
 
-export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
+
+export default function SnakeLive(props: Readonly<any>) {
     const prevSpeedXYRef = useRef<SpeedXY|null>();
     // горизонтальная и вертикальная скорости
     const [snakeLiveState, setSnakeLiveState] = useState<SnakeLiveState>({
@@ -298,7 +299,7 @@ export default function SnakeLive(props: Readonly<SnakeLiveProps>) {
             key={key}>
         </div>);
     return (
-        <div className={'board ' + (props.isDarkMode ? 'dark-theme' : 'light-theme')}>
+        <div className={'snakeLive ' + (props.isDarkMode ? 'dark-theme' : 'light-theme')}>
             <div className="grid"
                  style={
                      {

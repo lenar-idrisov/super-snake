@@ -5,21 +5,24 @@ import ThemeLightIcon from "../../assets/image/icons/themeLight.png";
 import Settings from "../../assets/image/icons/settings.png";
 import PauseIcon from "../../assets/image/icons/pause.png";
 import PlayIcon from "../../assets/image/icons/play.png";
-import {PanelProps} from "../../types/customTypes";
+import {PanelProps} from "../../types/propsTypes";
 import './panel.css';
+import {useTypedSelector} from "../../hooks/baseHooks";
 
-export default function Panel(props: PanelProps) {
+export default function Panel(props: any) {
+    const isSoundDisable = useTypedSelector(state => state.flags.isSoundDisable);
     return (
         <div className="panel">
             <div className="touch">
                 <button className="touch-button" onClick={props.switchSound}>
-                    <img src={props.isSoundDisable ? SoundOffIcon : SoundOnIcon}/>
+                    <img src={isSoundDisable ? SoundOffIcon : SoundOnIcon}/>
                 </button>
                 <button className="touch-button" onClick={props.switchSettings}>
                     <img src={Settings}/>
                 </button>
                 <button className="touch-button" onClick={props.switchDarkMode}>
-                    <img src={!props.isDarkMode ? ThemeLightIcon : ThemeDarkIcon}/>
+                    {/*!props.isDarkMode*/}
+                    <img src={ true ? ThemeLightIcon : ThemeDarkIcon}/>
                 </button>
                 <button className="touch-button" onClick={props.switchPause}>
                     <img src={props.gameStatus !== 'pause' ? PauseIcon : PlayIcon}/>

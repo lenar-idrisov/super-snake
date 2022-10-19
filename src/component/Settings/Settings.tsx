@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {themeColors} from '../../service/colors';
 import tr from '../../service/langManager';
-import {SettingsProps} from "../../types/customTypes";
+import {SettingsProps} from "../../types/propsTypes";
 import './settings.css';
+import {AdvContext} from "../../index";
 
-export default function Settings(props: SettingsProps) {
+export default function Settings(props: any) {
+    const advManager = useContext(AdvContext);
     const showAfterWatchAdv = (callback: Function) => {
         if (!props.isAdvWatched) {
-            props.advManager.showRewardedVideo(
+            advManager.showRewardedVideo(
                 () => {
                     props.setAdvWatched();
                     callback();

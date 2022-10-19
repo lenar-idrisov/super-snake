@@ -1,22 +1,16 @@
-import {useState, useEffect, useRef} from 'react';
-
+import {useEffect, useRef} from 'react';
+import {useActions, useTypedSelector} from "./baseHooks";
 import SoundEat from '../assets/sound/eat.wav';
 import SoundFail from '../assets/sound/fail.mp3';
 import SoundWin from '../assets/sound/win.mp3';
 import SoundPause from '../assets/sound/pause.mp3';
+import {SoundList} from "../types/functionTypes";
 
-
-interface SoundList {
-    [index: string]: HTMLAudioElement;
-    eat: HTMLAudioElement;
-    fail: HTMLAudioElement;
-    win: HTMLAudioElement;
-    pause: HTMLAudioElement;
-}
 
 export default () => {
     const soundsRef = useRef<SoundList>();
-    const [isSoundDisable, setSoundEnable] = useState(false);
+    const isSoundDisable = useTypedSelector(state => state.flags.isSoundDisable);
+    const {setGameFlag} = useActions();
 
     useEffect(() => {
         // предварительно загружаем звуки
@@ -29,13 +23,16 @@ export default () => {
     }, [])
 
     const switchSound = () => {
-        setSoundEnable(!isSoundDisable);
-        for (const key in soundsRef.current) {
-            soundsRef.current[key].volume = isSoundDisable ? 0 : 1;
+        let key: keyof SoundList;
+        if (soundsRef.current) {
+            for (key in soundsRef.current) {
+                soundsRef.current[key].volume = isSoundDisable ? 1 : 0;
+            }
         }
+        setGameFlag('isSoundDisable', !isSoundDisable);
     }
 
-    const playSound = (name: string) => {
+    const playSound = (name: keyof SoundList) => {
         if (soundsRef.current) {
             soundsRef.current[name].currentTime = 0;
             soundsRef.current[name].play();

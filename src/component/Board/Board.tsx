@@ -1,12 +1,14 @@
-import {useEffect, useRef} from 'react';
+import {useContext, useEffect, useRef} from 'react';
 import SnakeLive from "../SnakeLive/SnakeLive";
-import {BoardProps, BaseSizes} from "../../types/customTypes";
-import './board.css';
+import {BoardProps} from "../../types/propsTypes";
+import {BaseSizes} from "../../types/functionTypes";
+import {AdvContext} from "../../index";
 
 export default function Board(props: Readonly<BoardProps>) {
     // разеры клеточной зоны, где ходит змея
     // (ширина высота зоны, кол-во клеток, размер клетки)
     const baseSizesRef = useRef<BaseSizes>();
+    const advManager = useContext(AdvContext);
 
     useEffect(() => {
         baseSizesRef.current = getCalculatedSizes();
@@ -17,7 +19,7 @@ export default function Board(props: Readonly<BoardProps>) {
         const showPause = () => {
             if (props.gameStatus === 'move') {
                 setTimeout(_ => {
-                    props.advManager.showFullscreenAdv()
+                    advManager.showFullscreenAdv()
                     props.changeStatus('pause');
                 }, 300);
             }
@@ -25,7 +27,7 @@ export default function Board(props: Readonly<BoardProps>) {
         const showAdv = () => {
             if (props.gameStatus === 'move') {
                 props.changeStatus('pause');
-                props.advManager.showAdvBeforeExit(true)
+                advManager.showAdvBeforeExit(true)
             }
         }
         const subscribe = () => {

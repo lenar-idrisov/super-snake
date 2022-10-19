@@ -5,7 +5,7 @@ import {
     SnakeLiveState,
     SnakeSlice,
     BoxStyles
-} from "../types/customTypes";
+} from "../types/functionTypes";
 
 export const getKeydownKey = (event: KeyboardEvent) => {
     // учитываем только клавиши вверх/вниз/влево/вправо
