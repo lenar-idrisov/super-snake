@@ -1,12 +1,14 @@
 import {useContext, useEffect, useRef} from 'react';
-import SnakeLive from "../SnakeLive/SnakeLive";
 import {BoardProps} from "../../types/propsTypes";
 import {BaseSizes} from "../../types/functionTypes";
 import {AdvContext} from "../../index";
+import {useTypedSelector} from "../../hooks/baseHooks";
+import Snake from "../Snake/Snake";
 
-export default function Board(props: Readonly<BoardProps>) {
+export default function Board(props: BoardProps) {
     // разеры клеточной зоны, где ходит змея
     // (ширина высота зоны, кол-во клеток, размер клетки)
+    const {gameStatus} = useTypedSelector(state => state.app);
     const baseSizesRef = useRef<BaseSizes>();
     const advManager = useContext(AdvContext);
 
@@ -17,7 +19,7 @@ export default function Board(props: Readonly<BoardProps>) {
 
     useEffect(() => {
         const showPause = () => {
-            if (props.gameStatus === 'move') {
+            if (gameStatus === 'move') {
                 setTimeout(_ => {
                     advManager.showFullscreenAdv()
                     props.changeStatus('pause');
@@ -25,7 +27,7 @@ export default function Board(props: Readonly<BoardProps>) {
             }
         }
         const showAdv = () => {
-            if (props.gameStatus === 'move') {
+            if (gameStatus === 'move') {
                 props.changeStatus('pause');
                 advManager.showAdvBeforeExit(true)
             }
@@ -44,7 +46,7 @@ export default function Board(props: Readonly<BoardProps>) {
         }
         subscribe()
         return () => unSubscribe();
-    }, [props.gameStatus])
+    }, [gameStatus])
 
     // исходя из ширины экрана рассчитываем размер клеточки зоны
     function getCalculatedSizes() {
@@ -73,10 +75,11 @@ export default function Board(props: Readonly<BoardProps>) {
         }
     }
 
+
     if (!baseSizesRef.current) return null;
 
     return (
-        <SnakeLive
+        <Snake
             {...props}
             baseSizes={baseSizesRef.current}
         />

@@ -9,7 +9,7 @@ import {SoundList} from "../types/functionTypes";
 
 export default () => {
     const soundsRef = useRef<SoundList>();
-    const isSoundDisable = useTypedSelector(state => state.flags.isSoundDisable);
+    const {isSoundDisable} = useTypedSelector(state => state.flags);
     const {setGameFlag} = useActions();
 
     useEffect(() => {

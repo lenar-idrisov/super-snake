@@ -7,22 +7,6 @@ export interface SoundList {
     pause: HTMLAudioElement;
 }
 
-// скорость змейки по оси X и Y
-export interface SpeedXY {
-    dx: number;
-    dy: number
-}
-
-export interface Speed {
-    speedNum: number,
-    real: number|null
-}
-
-export interface ScoreInfo {
-    score: number;
-    maxScore: number
-}
-
 export interface BaseSizes {
     cellSize: number;
     activeHeight: number;
@@ -61,8 +45,8 @@ export interface BoxStyles {
     borderColor?: string,
 }
 
-export interface SnakeLiveState {
+export interface getReadyStylesParams {
     snake: SnakeSlice[],
-    foodList: FoodOne[],
-    barriers: BarrierUnit[]
+    barriers: BarrierUnit[],
+    foodList: FoodOne[]
 }

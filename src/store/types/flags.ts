@@ -15,6 +15,6 @@ export enum ListFlagActions {
 
 export interface SetFlagAction {
     type: typeof ListFlagActions.SET_GAME_FLAG;
-    flagName: string;
+    flagName: keyof FlagsState;
     payload: any
 }

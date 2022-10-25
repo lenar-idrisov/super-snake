@@ -13,5 +13,5 @@ export function randAB(min: number, max: number, excludedList: number[] = []) {
 }
 
 export function showError (message: string) {
-    console.log('%c' + message, `background: red; color: yellow; font-size: 25px`)
+    console.log('%c' + message, `background: red; color: yellow; font-size: 18px`)
 }

@@ -1,17 +1,22 @@
-import React, {useContext} from 'react';
+import './settings.css';
+import {useContext} from 'react';
 import {themeColors} from '../../service/colors';
 import tr from '../../service/langManager';
-import {SettingsProps} from "../../types/propsTypes";
-import './settings.css';
 import {AdvContext} from "../../index";
+import {SettingsProps} from "../../types/propsTypes";
+import {useActions, useTypedSelector} from "../../hooks/baseHooks";
 
-export default function Settings(props: any) {
+export default function Settings(props: SettingsProps) {
     const advManager = useContext(AdvContext);
+    const {setGameFlag, setBackColorIndex} = useActions();
+    const {isHardMode, isAdvWatched} = useTypedSelector(state => state.flags);
+    const {gameStatus, accentColor, backColorIndex} = useTypedSelector(state => state.app);
+
     const showAfterWatchAdv = (callback: Function) => {
-        if (!props.isAdvWatched) {
+        if (!isAdvWatched) {
             advManager.showRewardedVideo(
                 () => {
-                    props.setAdvWatched();
+                    setGameFlag('isAdvWatched', true);
                     callback();
                 },
                 () => {
@@ -22,28 +27,28 @@ export default function Settings(props: any) {
             callback();
         }
     }
-    const switchMode = (isHardMode: boolean) => {
+    const switchMode = (isHardModeOption: boolean) => {
         showAfterWatchAdv(() => {
-            if ((isHardMode && !props.isHardMode) || (!isHardMode && props.isHardMode)) {
-                props.switchMode();
+            if (isHardModeOption !== isHardMode) {
+                setGameFlag('isHardMode', !isHardMode);
             }
         });
     }
 
     const switchBackColor = (colorIndex: number) => {
-        showAfterWatchAdv(() => props.setBackColor(colorIndex));
+        showAfterWatchAdv(() => setBackColorIndex(colorIndex));
     }
 
 
-    const getOption = (comment: string, isHardMode: boolean) => {
-        const isActive = isHardMode ? (props.isHardMode) : (!props.isHardMode);
+    const getOption = (comment: string, isHardModeOption: boolean) => {
+        const isActive = isHardModeOption === isHardMode;
         return (
             <div className="input-container">
                 <div className={'switcher' + (isActive ? ' switcher-checked' : '')}
-                     style={{backgroundColor: isActive ? props.accentColor : ''}}
-                     onClick={() => switchMode(isHardMode)}>
+                     style={{backgroundColor: isActive ? accentColor : ''}}
+                     onClick={() => switchMode(isHardModeOption)}>
                 </div>
-                <div className="comment" onClick={() => switchMode(isHardMode)}>
+                <div className="comment" onClick={() => switchMode(isHardModeOption)}>
                     {tr(comment)}
                 </div>
             </div>
@@ -53,7 +58,7 @@ export default function Settings(props: any) {
     return (
         <div className="modal">
             <div className="modal-body settings">
-                {props.gameStatus === 'init' || props.gameStatus === 'restart' ?
+                {['init', 'restart'].includes(gameStatus) ?
                     <div className="mode-part">
                         <h2 className='title'>
                             {tr('Выбери режим игры')}
@@ -71,7 +76,7 @@ export default function Settings(props: any) {
                     </div>
                     <div className="colors">
                         {themeColors.map((color, i) =>
-                            <div className={'color ' + (i === props.backColorIndex ? 'color-selected' : '')}
+                            <div className={'color ' + (i === backColorIndex ? 'color-selected' : '')}
                                  style={{backgroundImage: color}}
                                  onClick={() => switchBackColor(i)}
                                  key={'c' + i}>
@@ -79,7 +84,7 @@ export default function Settings(props: any) {
                         )}
                     </div>
                 </div>
-                <button className="main-button" style={{backgroundColor: props.accentColor}}
+                <button className="main-button" style={{backgroundColor: accentColor}}
                         onClick={props.switchSettings}>
                     {tr('Старт')}
                 </button>

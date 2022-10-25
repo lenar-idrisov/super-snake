@@ -1,0 +1,60 @@
+.snakeVisual {
+   display: flex;
+   flex-direction: column;
+   margin-right: 0.3rem;
+   position: relative;
+   overflow: hidden;
+
+   .grid {
+      display: flex;
+      flex-wrap: wrap;
+   }
+
+   .cell {
+      border: 1px solid black;
+      box-sizing: border-box;
+      transition: position .1s;
+   }
+
+   .food {
+      position: absolute;
+      box-sizing: border-box;
+      z-index: 5;
+      border: 1px solid black;
+   }
+
+   .snake-chunk,
+   .barrier-chunk {
+      position: absolute;
+      z-index: 5;
+   }
+}
+
+
+.light-theme {
+   .grid {
+      background-color: #becede;
+   }
+
+   .cell {
+      border-color: rgba(187, 190, 205, 0.85);
+   }
+
+   .barrier-chunk {
+      background-color: #4f4e57; //#797886;
+   }
+}
+
+.dark-theme {
+   .grid {
+      background-color: #2a2d2d;
+   }
+
+   .cell {
+      border-color: #272727;
+   }
+
+   .barrier-chunk {
+      background-color: black; //#131313;
+   }
+}

@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react';
-import {getKeydownKey} from "../service/helpers";
-import {SpeedXY} from "../types/functionTypes";
+import {useActions} from "./baseHooks";
 
 enum Dirs {
     Right= 'right',
@@ -13,9 +12,7 @@ enum Dirs {
 export default () => {
     // направление хода змеи
     const [dir, setDirection] = useState('');
-    // дельта, прибавляемая к координатам змеи при ее хождении,
-    // (скорость змеи по оси x и y)
-    const [speedXY, setSpeedXY] = useState<SpeedXY|null>(null);
+    const {updateShiftXY} = useActions();
 
     useEffect(() => {
         document.addEventListener('keydown', keydownHandler);
@@ -23,6 +20,18 @@ export default () => {
             document.removeEventListener('keydown', keydownHandler);
         }
     });
+
+    const getKeydownKey = (event: KeyboardEvent) => {
+        // учитываем только клавиши вверх/вниз/влево/вправо
+        if ([
+            'ArrowUp', 'ArrowDown',
+            'ArrowRight', 'ArrowLeft'
+        ].includes(event.code)) {
+            return event.code.replace('Arrow', '').toLowerCase();
+        } else {
+            return null;
+        }
+    }
 
     const getCorrectedDir = (newDirection: string) => {
         let resultCourse = newDirection;
@@ -43,7 +52,7 @@ export default () => {
         if (newDirection !== dir) {
             // нужно, чтобы змея не успела сделать шаг в старом направлении
             clearTimeout((window as any).snakeMoveTimerId);
-            changeSpeedXY(correctDir);
+            IncreaseSpeedXY(correctDir);
             setDirection(correctDir);
         }
     }
@@ -55,7 +64,7 @@ export default () => {
         }
     }
 
-    const changeSpeedXY = (newDir: string) => {
+    const IncreaseSpeedXY = (newDir: string) => {
         let newDX, newDY;
 
         if (newDir === Dirs.Left) {
@@ -73,14 +82,13 @@ export default () => {
         } else {
             return;
         }
-        setSpeedXY({
+        updateShiftXY({
             dx: newDX,
             dy: newDY
         });
     }
 
     return {
-        speedXY,
         changeDirection
     }
 }

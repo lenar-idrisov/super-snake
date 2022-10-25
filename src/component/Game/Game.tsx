@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import './Game.css';
 import Settings from '../Settings/Settings'
 import Controls from '../Controls/Controls';
 import Pause from '../Pause/Pause';
@@ -8,65 +8,51 @@ import Board from "../Board/Board";
 
 import useDirection from '../../hooks/useDirection';
 import useSound from "../../hooks/useSound";
-import useSpeed from "../../hooks/useSpeed";
 
 import {randAB} from "../../service/utils";
 import {themeColors} from '../../service/colors';
 import {GameStatusList} from "../../types/functionTypes";
-import './Game.css';
+import {useActions, useTypedSelector} from "../../hooks/baseHooks";
 
 
 export default function Game() {
     const isMobile = (document.querySelector('html') as HTMLHtmlElement).offsetWidth < 500;
-    const [gameStatus, setStatus] = useState('');
-    // цвет кнопок управления
-    const [accentColor, setAccentColor] = useState('');
-    // цвет фона игры
-    const [backColorIndex, setBackColor] = useState(0);
+    const {
+        gameStatus,
+        backColorIndex,
+        scoreInfo
+    } = useTypedSelector(state => state.app);
+    const {
+        setGameStatus,
+        setAccentColor,
+        setBackColorIndex,
+        setScoreInfo,
+        increaseSpeed
+    } = useActions();
 
-    const [scoreInfo, setScoreInfo] = useState(() => getInitialScoreInfo());
-    const [gameFlags, setGameFlags] = useState<any>({
-        isHardMode: false,
-        isAdvWatched: false,
-        isDarkMode: false,
-        isSoundDisable: false,
-    });
-    const {speedNum, realSpeed, increaseSpeed} = useSpeed();
-    const {speedXY, changeDirection} = useDirection();
+
+    const {changeDirection} = useDirection();
     const {switchSound, playSound} = useSound();
 
 
     function changeStatus(newStatus: GameStatusList) {
         if (['init', 'restart'].includes(newStatus)) {
             changeDirection('right');
-            setBackColor(randAB(0, themeColors.length));
+            setBackColorIndex(randAB(0, themeColors.length));
             setAccentColor(getAccentColor());
-            setScoreInfo(getInitialScoreInfo());
-            setStatus(newStatus);
+            setScoreInfo('score', 0);
+            setScoreInfo('maxScore', Math.ceil(randAB(500, 1000) / 5) * 5);
+            setGameStatus(newStatus);
         } else {
-            setStatus(newStatus);
+            setGameStatus(newStatus);
         }
-    }
-
-    function getInitialScoreInfo() {
-        return {
-            score: 0,
-            maxScore: Math.ceil(randAB(500, 1000) / 5) * 5,
-        }
-    }
-
-    function switchGameFlags(flagName: any) {
-        setGameFlags({
-            ...gameFlags,
-            [flagName]: !(gameFlags[flagName])
-        })
     }
 
     function increaseScore() {
-        setScoreInfo({
-            ...scoreInfo,
-            score: scoreInfo.score + 5,
-        })
+        setScoreInfo(
+            'score',
+            scoreInfo.score + 5,
+        )
     }
 
     function getAccentColor() {
@@ -80,33 +66,18 @@ export default function Game() {
 
     return (
         <div className="game" style={{backgroundImage: themeColors[backColorIndex]}}>
-            {gameStatus === 'init' || gameStatus === 'settings' ?
+            {['init', 'settings'].includes(gameStatus) ?
                 <Settings
-                    {...gameFlags}
-                    accentColor={accentColor}
-                    backColorIndex={backColorIndex}
-                    gameStatus={gameStatus}
-                    setBackColor={setBackColor}
-                    setAdvWatched={() => switchGameFlags('isAdvWatched')}
-                    switchMode={() => switchGameFlags('isHardMode')}
                     switchSettings={() => changeStatus('move')}/> : null}
             {gameStatus === 'pause' ?
                 <Pause
-                    accentColor={accentColor}
                     switchPause={() => changeStatus('move')}
                 /> : null}
             {gameStatus === 'win' || gameStatus === 'fail' ?
                 <Ending
-                    gameStatus={gameStatus}
-                    accentColor={accentColor}
                     restart={() => changeStatus('restart')}/> : null}
             <div className={'main-zone' + (!isMobile ? ' centered-part' : '')}>
                 <Board
-                    {...scoreInfo}
-                    {...gameFlags}
-                    gameStatus={gameStatus}
-                    speedXY={speedXY}
-                    realSpeed={realSpeed}
                     changeDirection={changeDirection}
                     playSound={playSound}
                     increaseScore={increaseScore}
@@ -115,20 +86,13 @@ export default function Game() {
                     switchWin={() => changeStatus('win')}
                 />
                 <Panel
-                    {...scoreInfo}
-                    {...gameFlags}
-                    gameStatus={gameStatus}
-                    speedNum={speedNum}
                     switchSound={switchSound}
-                    increaseSpeed={increaseSpeed}
-                    switchDarkMode={() => switchGameFlags('isDarkMode')}
                     switchPause={() => changeStatus('pause')}
                     switchSettings={() => changeStatus('settings')}
                 />
             </div>
             {isMobile ?
                 <Controls
-                    accentColor={accentColor}
                     changeDirection={changeDirection}/> : null}
         </div>
     );

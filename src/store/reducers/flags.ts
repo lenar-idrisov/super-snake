@@ -17,7 +17,6 @@ export const flagsReducer = (state = initialState, action: SetFlagAction): Flags
                 [action.flagName]: action.payload
             }
         default:
-            showError('неопознанный action ' + action.type);
             return state;
     }
 }
