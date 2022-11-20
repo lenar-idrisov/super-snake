@@ -1,7 +1,6 @@
-import {RootState} from "../store/reducers";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {bindActionCreators} from "@reduxjs/toolkit";
-import actionCreators from '../store/action-creators';
+import {RootState} from "../store";
 
 
 /*export const useTypedSelector = (selector: (state: RootState) => any) =>
@@ -9,7 +8,7 @@ import actionCreators from '../store/action-creators';
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const useActions = () => {
+export const useActionsWithDispatch = (slice: any)  => {
     const dispatch = useDispatch();
-    return bindActionCreators(actionCreators, dispatch);
+    return bindActionCreators(slice.actions, dispatch);
 }

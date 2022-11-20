@@ -4,19 +4,22 @@ import {themeColors} from '../../service/colors';
 import tr from '../../service/langManager';
 import {AdvContext} from "../../index";
 import {SettingsProps} from "../../types/propsTypes";
-import {useActions, useTypedSelector} from "../../hooks/baseHooks";
+import {useActionsWithDispatch, useTypedSelector} from "../../hooks/baseHooks";
+import {flagSlice} from "../../store/reducers/flags";
+import {appSlice} from "../../store/reducers/app";
 
 export default function Settings(props: SettingsProps) {
     const advManager = useContext(AdvContext);
-    const {setGameFlag, setBackColorIndex} = useActions();
     const {isHardMode, isAdvWatched} = useTypedSelector(state => state.flags);
     const {gameStatus, accentColor, backColorIndex} = useTypedSelector(state => state.app);
+    const {setBackColorIndex} = useActionsWithDispatch(appSlice);
+    const {switchAdvWatched, switchHardMode} = useActionsWithDispatch(flagSlice);
 
     const showAfterWatchAdv = (callback: Function) => {
         if (!isAdvWatched) {
             advManager.showRewardedVideo(
                 () => {
-                    setGameFlag('isAdvWatched', true);
+                    switchAdvWatched();
                     callback();
                 },
                 () => {
@@ -30,7 +33,7 @@ export default function Settings(props: SettingsProps) {
     const switchMode = (isHardModeOption: boolean) => {
         showAfterWatchAdv(() => {
             if (isHardModeOption !== isHardMode) {
-                setGameFlag('isHardMode', !isHardMode);
+                switchHardMode();
             }
         });
     }

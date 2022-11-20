@@ -12,7 +12,9 @@ import useSound from "../../hooks/useSound";
 import {randAB} from "../../service/utils";
 import {themeColors} from '../../service/colors';
 import {GameStatusList} from "../../types/functionTypes";
-import {useActions, useTypedSelector} from "../../hooks/baseHooks";
+import {useActionsWithDispatch, useTypedSelector} from "../../hooks/baseHooks";
+import {flagSlice} from "../../store/reducers/flags";
+import {appSlice} from "../../store/reducers/app";
 
 
 export default function Game() {
@@ -20,15 +22,15 @@ export default function Game() {
     const {
         gameStatus,
         backColorIndex,
-        scoreInfo
     } = useTypedSelector(state => state.app);
     const {
         setGameStatus,
         setAccentColor,
         setBackColorIndex,
-        setScoreInfo,
-        increaseSpeed
-    } = useActions();
+        increaseScore,
+        resetScore,
+        setMaxScore,
+    } = useActionsWithDispatch(appSlice);
 
 
     const {changeDirection} = useDirection();
@@ -40,19 +42,12 @@ export default function Game() {
             changeDirection('right');
             setBackColorIndex(randAB(0, themeColors.length));
             setAccentColor(getAccentColor());
-            setScoreInfo('score', 0);
-            setScoreInfo('maxScore', Math.ceil(randAB(500, 1000) / 5) * 5);
+            resetScore();
+            setMaxScore(Math.ceil(randAB(500, 1000) / 5) * 5);
             setGameStatus(newStatus);
         } else {
             setGameStatus(newStatus);
         }
-    }
-
-    function increaseScore() {
-        setScoreInfo(
-            'score',
-            scoreInfo.score + 5,
-        )
     }
 
     function getAccentColor() {

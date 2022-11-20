@@ -7,14 +7,16 @@ import Settings from "../../assets/image/icons/settings.png";
 import PauseIcon from "../../assets/image/icons/pause.png";
 import PlayIcon from "../../assets/image/icons/play.png";
 import {PanelProps} from "../../types/propsTypes";
-import {useActions, useTypedSelector} from "../../hooks/baseHooks";
+import {useActionsWithDispatch, useTypedSelector} from "../../hooks/baseHooks";
+import {flagSlice} from "../../store/reducers/flags";
+import {snakeMoreSlice} from "../../store/reducers/snakeMore";
 
 export default function Panel(props: PanelProps) {
     const {isDarkMode, isSoundDisable} = useTypedSelector(state => state.flags);
     const {scoreInfo, gameStatus} = useTypedSelector(state => state.app);
-    const {setGameFlag, increaseSpeed} = useActions();
     const {speedNum} = useTypedSelector(state => state.snake);
-    const switchDarkMode = () => setGameFlag('isDarkMode', !isDarkMode);
+    const {switchDarkMode} = useActionsWithDispatch(flagSlice);
+    const {increaseSpeed} = useActionsWithDispatch(snakeMoreSlice);
 
 
     return (

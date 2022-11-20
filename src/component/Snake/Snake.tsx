@@ -1,11 +1,12 @@
 import {useEffect} from 'react';
 import {FoodOne} from "../../types/functionTypes";
-import {useActions, useTypedSelector} from "../../hooks/baseHooks";
+import {useActionsWithDispatch, useTypedSelector} from "../../hooks/baseHooks";
 import useFood from "../../hooks/useFood";
 import useBarriers from "../../hooks/useBarriers";
 import SnakeVisual from "./SnakeVisual";
 import {SnakeProps} from "../../types/propsTypes";
 import usePrev from "../../hooks/usePrev";
+import {snakeMoreSlice} from "../../store/reducers/snakeMore";
 
 
 export default function Snake(props: SnakeProps) {
@@ -14,8 +15,8 @@ export default function Snake(props: SnakeProps) {
 
     const {gameStatus, scoreInfo} = useTypedSelector(state => state.app);
     const {snake,speedNum, shiftXY} = useTypedSelector(state => state.snake);
-    const {updateSnake, updateBarriers, updateFood} = useActions();
     const {isValChanged: isDirectionChanged} = usePrev(shiftXY);
+    const {updateSnake, updateBarriers, updateFood} = useActionsWithDispatch(snakeMoreSlice);
 
 
     // инициация и остановка/запуск змейки при открытии модальных окон

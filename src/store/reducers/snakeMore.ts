@@ -1,5 +1,5 @@
-import {showError} from "../../service/utils";
-import {ListSnakeMoreActions, SnakeMoreActions, SnakeMoreState} from "../types/snakeMore";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {SnakeMoreState} from "../types/states";
 
 const initialState: SnakeMoreState = {
     snake: [],
@@ -12,7 +12,7 @@ const initialState: SnakeMoreState = {
     },
 }
 
-export const snakeMoreReducer = (
+/*export const snakeMoreReducer = (
     state = initialState,
     action: SnakeMoreActions):
     SnakeMoreState => {
@@ -31,4 +31,28 @@ export const snakeMoreReducer = (
             return state;
         }
     }
-}
+}*/
+
+export const snakeMoreSlice = createSlice({
+    name: 'snakeMore',
+    initialState,
+    reducers: {
+        updateBarriers(state: SnakeMoreState, action: PayloadAction<SnakeMoreState['barriers']>) {
+            state.barriers = action.payload;
+        },
+        updateSnake(state: SnakeMoreState, action: PayloadAction<SnakeMoreState['snake']>) {
+            state.snake = action.payload;
+        },
+        updateFood(state: SnakeMoreState, action: PayloadAction<SnakeMoreState['foodList']>) {
+            state.foodList = action.payload;
+        },
+        updateShiftXY(state: SnakeMoreState, action: PayloadAction<SnakeMoreState['shiftXY']>) {
+            state.shiftXY = action.payload;
+        },
+        increaseSpeed(state: SnakeMoreState) {
+            state.speedNum = (state.speedNum <= 3 ? (state.speedNum + 1) : 1);
+        }
+    }
+})
+
+export default snakeMoreSlice.reducer;

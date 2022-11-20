@@ -6,13 +6,14 @@ import {
     SnakeSlice,
     BarrierUnit,
 } from "../types/functionTypes";
-import {useActions, useTypedSelector} from "./baseHooks";
+import {useActionsWithDispatch, useTypedSelector} from "./baseHooks";
 import {useEffect} from "react";
+import {snakeMoreSlice} from "../store/reducers/snakeMore";
 
 
 export default function useFood(baseSizes: BaseSizes) {
     const {snake, foodList, barriers} = useTypedSelector(state => state.snake);
-    const {updateFood} = useActions();
+    const {updateFood} = useActionsWithDispatch(snakeMoreSlice);
 
 
     useEffect(() => {

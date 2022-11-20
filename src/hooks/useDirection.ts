@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
-import {useActions} from "./baseHooks";
+import {useActionsWithDispatch} from "./baseHooks";
+import {snakeMoreSlice} from "../store/reducers/snakeMore";
 
 enum Dirs {
     Right= 'right',
@@ -12,7 +13,7 @@ enum Dirs {
 export default () => {
     // направление хода змеи
     const [dir, setDirection] = useState('');
-    const {updateShiftXY} = useActions();
+    const {updateShiftXY} = useActionsWithDispatch(snakeMoreSlice);
 
     useEffect(() => {
         document.addEventListener('keydown', keydownHandler);

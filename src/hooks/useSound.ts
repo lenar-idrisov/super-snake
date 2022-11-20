@@ -1,16 +1,17 @@
 import {useEffect, useRef} from 'react';
-import {useActions, useTypedSelector} from "./baseHooks";
+import {useActionsWithDispatch, useTypedSelector} from "./baseHooks";
 import SoundEat from '../assets/sound/eat.wav';
 import SoundFail from '../assets/sound/fail.mp3';
 import SoundWin from '../assets/sound/win.mp3';
 import SoundPause from '../assets/sound/pause.mp3';
 import {SoundList} from "../types/functionTypes";
+import {flagSlice} from "../store/reducers/flags";
 
 
 export default () => {
     const soundsRef = useRef<SoundList>();
     const {isSoundDisable} = useTypedSelector(state => state.flags);
-    const {setGameFlag} = useActions();
+    const {switchSoundEnable} = useActionsWithDispatch(flagSlice);
 
     useEffect(() => {
         // предварительно загружаем звуки
@@ -29,7 +30,7 @@ export default () => {
                 soundsRef.current[key].volume = isSoundDisable ? 1 : 0;
             }
         }
-        setGameFlag('isSoundDisable', !isSoundDisable);
+        switchSoundEnable();
     }
 
     const playSound = (name: keyof SoundList) => {
